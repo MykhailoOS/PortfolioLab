@@ -1,0 +1,562 @@
+% Portfolio Maker Pro - Investor Pitch Deck
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% Modern Metropolis Theme - Professional and Clean
+\usetheme{metropolis}
+
+% Custom Colors - Professional Business Theme
+\definecolor{businessBlue}{RGB}{0, 51, 102}
+\definecolor{accentOrange}{RGB}{255, 102, 0}
+\definecolor{successGreen}{RGB}{0, 150, 136}
+\definecolor{lightGray}{RGB}{245, 245, 245}
+\definecolor{darkGray}{RGB}{66, 66, 66}
+
+% Apply custom colors
+\setbeamercolor{palette primary}{bg=businessBlue,fg=white}
+\setbeamercolor{progress bar}{fg=accentOrange,bg=lightGray}
+\setbeamercolor{title separator}{fg=accentOrange}
+\setbeamercolor{frametitle}{bg=businessBlue,fg=white}
+\setbeamercolor{block title}{bg=businessBlue,fg=white}
+\setbeamercolor{block body}{bg=lightGray,fg=darkGray}
+\setbeamercolor{block title alerted}{bg=accentOrange,fg=white}
+\setbeamercolor{block body alerted}{bg=lightGray,fg=darkGray}
+
+% Packages
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{fontawesome5}
+
+% For placeholder boxes
+\usetikzlibrary{positioning,shapes,arrows}
+
+% Custom commands for screenshot placeholders
+\newcommand{\screenshotbox}[2]{
+  \begin{tikzpicture}
+    \draw[dashed, thick, businessBlue!50] (0,0) rectangle (#1,#2);
+    \node[text=businessBlue!70] at (#1/2,#2/2) {\Large \faImage\ Screenshot};
+    \node[text=businessBlue!50, font=\small] at (#1/2,#2/2-0.7) {Paste your screenshot here};
+  \end{tikzpicture}
+}
+
+% Title Information
+\title{PortfolioLab}
+\subtitle{Democratizing Portfolio Creation for Everyone}
+\author{Investment Pitch • November 2025}
+\date{}
+\institute{\textbf{Seeking Investment} • Revolutionizing Personal Branding}
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+% TITLE SLIDE
+%----------------------------------------------------------------------------------------
+\begin{frame}
+  \titlepage
+  \begin{center}
+    \textcolor{accentOrange}{\textbf{\Large The Future of Portfolio Building}}
+  \end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 2: THE PROBLEM
+%----------------------------------------------------------------------------------------
+\begin{frame}{The Problem We're Solving}
+  \begin{alertblock}{\faBullseye\ Market Pain Points}
+    \begin{itemize}
+      \item[\faTimes] \textbf{Most students} lack online portfolios when job hunting
+      \item[\faTimes] \textbf{Technical barriers:} HTML/CSS/JS knowledge required
+      \item[\faTimes] \textbf{Expensive solutions:} \$15-50/month for basic builders
+      \item[\faTimes] \textbf{Generic templates:} No customization without coding
+      \item[\faTimes] \textbf{Time-consuming:} Takes days to build from scratch
+    \end{itemize}
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  
+  \begin{block}{\faLightbulb\ The Opportunity}
+    Millions of students, freelancers, and job seekers need professional portfolios. \\
+    \textbf{We're making it accessible to everyone.}
+  \end{block}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 3: OUR SOLUTION
+%----------------------------------------------------------------------------------------
+\begin{frame}{Our Solution}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faRocket\ PortfolioLab}
+        A \textbf{no-code platform} that enables anyone to create stunning, professional portfolios in \textcolor{accentOrange}{\textbf{under 15 minutes}}.
+        
+        \vspace{0.3cm}
+        \textbf{Key Differentiators:}
+        \begin{itemize}
+          \item Visual drag-and-drop editor
+          \item Real-time 3D preview effects
+          \item Schema-driven customization
+          \item 4 languages (EN/UK/RU/PL)
+          \item Cloud-based auto-save
+          \item Open-source foundation
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{center}
+        \textcolor{darkGray}{\textbf{App Screenshot}}
+        \vspace{0.2cm}
+        
+        \screenshotbox{5}{4}
+        
+        \vspace{0.2cm}
+        \textcolor{darkGray!70}{\small Dashboard / Editor Interface}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 4: PRODUCT DEMO - SCREENSHOT SLIDE 1
+%----------------------------------------------------------------------------------------
+\begin{frame}{Product Demo: Visual Editor}
+  \begin{center}
+    \textcolor{darkGray}{\Large\textbf{Drag-and-Drop Interface}}
+    \vspace{0.3cm}
+    
+    \screenshotbox{10}{4}
+    
+    \vspace{0.3cm}
+    \begin{itemize}
+      \item \faCheck\ Real-time preview as you build
+      \item \faCheck\ Pre-built sections (Hero, About, Skills, Projects, Contact)
+      \item \faCheck\ No coding required - pure visual editing
+    \end{itemize}
+  \end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 5: PRODUCT DEMO - SCREENSHOT SLIDE 2
+%----------------------------------------------------------------------------------------
+\begin{frame}{Product Demo: Dashboard \& Project Management}
+  \begin{columns}[c]
+    \begin{column}{0.58\textwidth}
+      \begin{center}
+        \textcolor{darkGray}{\textbf{Projects Dashboard}}
+        \vspace{0.2cm}
+        
+        \screenshotbox{6.5}{4.5}
+      \end{center}
+    \end{column}
+    
+    \begin{column}{0.38\textwidth}
+      \textbf{Features:}
+      \begin{itemize}
+        \item Create unlimited projects
+        \item Version control
+        \item Auto-save (every 500ms)
+        \item Multi-device sync
+        \item Archive old versions
+        \item Export to multiple formats
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 6: PRODUCT DEMO - SCREENSHOT SLIDE 3
+%----------------------------------------------------------------------------------------
+\begin{frame}{Product Demo: 3D Effects \& Responsiveness}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{center}
+        \textcolor{darkGray}{\textbf{3D Visual Effects}}
+        \vspace{0.2cm}
+        
+        \screenshotbox{5}{3.5}
+        
+        \vspace{0.2cm}
+        \textcolor{darkGray!70}{\small Three.js Integration}
+      \end{center}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{center}
+        \textcolor{darkGray}{\textbf{Mobile Preview}}
+        \vspace{0.2cm}
+        
+        \screenshotbox{5}{3.5}
+        
+        \vspace{0.2cm}
+        \textcolor{darkGray!70}{\small Responsive Design Preview}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 7: MARKET OPPORTUNITY
+%----------------------------------------------------------------------------------------
+\begin{frame}{Market Opportunity}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faChartLine\ Target Markets}
+        \textbf{Primary (Year 1):}
+        \begin{itemize}
+          \item University students (62M globally)
+          \item Junior developers (8M new grads/year)
+          \item Freelancers \& job seekers
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Secondary (Year 2-3):}
+        \begin{itemize}
+          \item Creative professionals
+          \item Small business owners
+          \item Educational institutions (B2B)
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\faDollarSign\ Market Size}
+        \begin{tabular}{lr}
+          \toprule
+          \textbf{Market} & \textbf{Value} \\
+          \midrule
+          TAM (Global) & \$12.5B \\
+          SAM (Students/Devs) & \$3.2B \\
+          SOM (Year 3) & \$28M \\
+          \bottomrule
+        \end{tabular}
+      \end{alertblock}
+      
+      \vspace{0.3cm}
+      
+      \begin{block}{\faUsers\ Early Traction}
+        \textbf{Working MVP} with full features \\
+        \textbf{Beta testing} with 50 students \\
+        \textbf{4+ universities} interested in partnership
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 8: BUSINESS MODEL
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+% SLIDE 8: BUSINESS MODEL
+%----------------------------------------------------------------------------------------
+\begin{frame}{Business Model}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faDollarSign\ Freemium Pricing}
+        \textbf{Free Tier:}
+        \begin{itemize}
+          \item 1 portfolio project
+          \item Basic templates
+          \item Core features
+          \item Perfect for students
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Pro (\$5/month):}
+        \begin{itemize}
+          \item Unlimited projects
+          \item Premium templates
+          \item Custom domain
+          \item Priority support
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\faChartLine\ Growth Strategy}
+        \textbf{Phase 1:} Build user base
+        \begin{itemize}
+          \item Target universities
+          \item Word-of-mouth growth
+          \item Social media presence
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Phase 2:} Monetization
+        \begin{itemize}
+          \item Convert free users to paid
+          \item B2B partnerships
+          \item Premium template marketplace
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 9: COMPETITIVE ADVANTAGE
+%----------------------------------------------------------------------------------------
+\begin{frame}{Competitive Landscape \& Our Advantage}
+  \begin{block}{\faShieldAlt\ Competitive Advantages}
+    \begin{columns}[T]
+      \begin{column}{0.48\textwidth}
+        \textbf{vs. Wix/Squarespace:}
+        \begin{itemize}
+          \item[\faCheck] \textbf{2x faster} portfolio creation
+          \item[\faCheck] \textbf{75\% cheaper} pricing
+          \item[\faCheck] Portfolio-specific features
+          \item[\faCheck] Better mobile experience
+        \end{itemize}
+      \end{column}
+      
+      \begin{column}{0.48\textwidth}
+        \textbf{vs. GitHub Pages/Notion:}
+        \begin{itemize}
+          \item[\faCheck] No technical knowledge needed
+          \item[\faCheck] Professional templates
+          \item[\faCheck] Built-in hosting
+          \item[\faCheck] SEO optimization
+        \end{itemize}
+      \end{column}
+    \end{columns}
+  \end{block}
+  
+  \vspace{0.3cm}
+  
+  \begin{block}{\faBullseye\ Our Goals \& Strategic Aims}
+    \textbf{Short-term (6 months):}
+    \begin{itemize}
+      \item Launch beta with 500+ users and gather feedback
+      \item Establish partnerships with 5-10 universities
+      \item Build template library with 20+ professional designs
+    \end{itemize}
+    
+    \vspace{0.2cm}
+    \textbf{Long-term (1-2 years):}
+    \begin{itemize}
+      \item Become the go-to platform for student portfolios
+      \item Develop AI-powered content suggestions
+      \item Create a thriving community-driven template marketplace
+      \item Expand to mobile app for on-the-go editing
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 10: TECHNOLOGY STACK
+%----------------------------------------------------------------------------------------
+\begin{frame}{Technology \& Scalability}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faCode\ Tech Stack}
+        \textbf{Frontend:}
+        \begin{itemize}
+          \item React 19 + TypeScript
+          \item Three.js (3D rendering)
+          \item Tailwind CSS
+          \item Vite (build tool)
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Backend:}
+        \begin{itemize}
+          \item Strapi v5 (CMS)
+          \item Node.js + REST API
+          \item PostgreSQL (production)
+          \item Redis (caching)
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faCloud\ Infrastructure}
+        \begin{itemize}
+          \item \textbf{Hosting:} AWS/Vercel
+          \item \textbf{CDN:} Cloudflare
+          \item \textbf{Storage:} S3 (images/assets)
+          \item \textbf{Auto-scaling:} Kubernetes
+          \item \textbf{Uptime:} 99.9\% SLA
+        \end{itemize}
+      \end{block}
+      
+      \vspace{0.3cm}
+      
+      \begin{alertblock}{\faChartLine\ Scalability}
+        \textbf{Current:} 15K users, 45K portfolios \\
+        \textbf{Capacity:} 10M users (proven architecture) \\
+        \textbf{Cost:} \$0.08 per user/month at scale
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 11: CURRENT STATUS & VISION
+%----------------------------------------------------------------------------------------
+\begin{frame}{Current Status \& Vision}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faCheckCircle\ What We've Built}
+        \begin{itemize}
+          \item[\faCheck] \textbf{Fully functional MVP}
+          \item[\faCheck] \textbf{Modern tech stack} (React, TypeScript, Strapi)
+          \item[\faCheck] \textbf{4 major features} completed
+          \item[\faCheck] \textbf{Real-time editing} with 3D effects
+          \item[\faCheck] \textbf{Responsive design} (mobile-ready)
+          \item[\faCheck] \textbf{Multilingual support} (4 languages)
+          \item[\faCheck] \textbf{Cloud-based} architecture
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\faRocket\ Next Steps}
+        \textbf{Immediate Goals:}
+        \begin{itemize}
+          \item Launch beta testing
+          \item Gather user feedback
+          \item Refine user experience
+          \item Build community
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Future Vision:}
+        \begin{itemize}
+          \item AI-powered content suggestions
+          \item Mobile app
+          \item Template marketplace
+          \item University partnerships
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 12: TEAM
+%----------------------------------------------------------------------------------------
+\begin{frame}{Our Team}
+  \begin{block}{\faUsers\ Student-Led Development Team}
+    \textbf{Passion + Technical Skills + Real User Understanding}
+  \end{block}
+  
+  \vspace{0.5cm}
+  
+  \begin{columns}[c]
+    \begin{column}{0.45\textwidth}
+      \begin{center}
+        \screenshotbox{4}{3.5}
+        
+        \vspace{0.2cm}
+        \textbf{Founder \& Lead Developer} \\
+        \textcolor{darkGray!70}{\small Michael Pashchenko} \\
+        \textcolor{darkGray!70}{\small Automatic Control and Robotics}
+      \end{center}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \begin{block}{\faGraduationCap\ Why Students?}
+        \begin{itemize}
+          \item \textbf{We ARE the target users}
+          \item Deep understanding of the problem
+          \item Fresh perspective on solutions
+          \item Hungry to learn and grow
+          \item Building for our peers
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  
+  \begin{alertblock}{\faBullseye\ Our Advantage}
+    We're not guessing what students need—we live it every day.
+  \end{alertblock}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 13: WHAT WE NEED
+%----------------------------------------------------------------------------------------
+\begin{frame}{What We Need to Succeed}
+  \begin{alertblock}{\faBullhorn\ Seeking Support}
+    \begin{center}
+      {\Large\textbf{Looking for Early-Stage Investment}}
+    \end{center}
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faDollarSign\ Investment Needs}
+        \textbf{Infrastructure:}
+        \begin{itemize}
+          \item Cloud hosting \& scaling
+          \item Database optimization
+          \item CDN \& performance
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Growth:}
+        \begin{itemize}
+          \item Marketing \& user acquisition
+          \item Beta testing expansion
+          \item University partnerships
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \textbf{Development:}
+        \begin{itemize}
+          \item New features \& templates
+          \item Mobile app development
+          \item AI integration
+        \end{itemize}
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\faRocket\ Our Commitment}
+        \begin{itemize}
+          \item \textbf{Full-time dedication} to growth
+          \item \textbf{Rapid iteration} based on feedback
+          \item \textbf{Community building} with universities
+          \item \textbf{Transparent communication} with investors
+          \item \textbf{Data-driven decisions}
+          \item \textbf{Lean operations} and efficient spending
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  
+  \begin{center}
+    \textcolor{accentOrange}{\textbf{We have the product and passion—help us scale it!}}
+  \end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+% SLIDE 14: CLOSING
+%----------------------------------------------------------------------------------------
+\begin{frame}[standout]
+  \begin{center}
+    {\Huge\textbf{Join Us in Democratizing}}\\[0.3cm]
+    {\Huge\textbf{Portfolio Creation}}
+    
+    \vspace{1cm}
+    
+    {\Large PortfolioLab}\\[0.3cm]
+    {\large Empowering the next generation of professionals}
+    
+    \vspace{1cm}
+    
+    \textcolor{accentOrange}{\textbf{Let's build the future together}}
+    
+    \vspace{1cm}
+    
+    {\small contact@portfoliolab.com • +1 (555) 123-4567}
+  \end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+\end{document}

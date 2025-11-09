@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  directus:
+    image: directus/directus:latest
+    ports:
+      - 8055:8055
+    volumes:
+      - ./directus/database:/directus/database
+      - ./directus/uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions
+    environment:
+      # IMPORTANT: Replace these with secure random strings
+      # Generate with: openssl rand -base64 32
+      KEY: 'replace-with-random-string-min-32-chars-abc123'
+      SECRET: 'replace-with-another-random-string-min-32-chars-xyz789'
+      
+      # Admin account
+      ADMIN_EMAIL: 'admin@example.com'
+      ADMIN_PASSWORD: 'admin123'
+      
+      # Database (SQLite for demo - use PostgreSQL in production)
+      DB_CLIENT: 'sqlite3'
+      DB_FILENAME: '/directus/database/data.db'
+      
+      # WebSockets
+      WEBSOCKETS_ENABLED: 'true'
+      
+      # CORS settings for development
+      # IMPORTANT: Update for production to specific domain(s)
+      CORS_ENABLED: 'true'
+      CORS_ORIGIN: 'http://localhost:3000'
+      
+      # File upload settings
+      MAX_PAYLOAD_SIZE: '5mb'
+      
+      # Public URL (update if using different port or domain)
+      PUBLIC_URL: 'http://localhost:8055'
+      
+    restart: unless-stopped
+
+# For production, consider using PostgreSQL:
+#
+# services:
+#   directus:
+#     image: directus/directus:latest
+#     ports:
+#       - 8055:8055
+#     environment:
+#       KEY: 'your-secure-key'
+#       SECRET: 'your-secure-secret'
+#       ADMIN_EMAIL: 'admin@example.com'
+#       ADMIN_PASSWORD: 'secure-password'
+#       DB_CLIENT: 'pg'
+#       DB_HOST: 'postgres'
+#       DB_PORT: '5432'
+#       DB_DATABASE: 'directus'
+#       DB_USER: 'directus'
+#       DB_PASSWORD: 'directus'
+#       CORS_ENABLED: 'true'
+#       CORS_ORIGIN: 'https://your-domain.com'
+#       MAX_PAYLOAD_SIZE: '5mb'
+#     depends_on:
+#       - postgres
+#   
+#   postgres:
+#     image: postgres:15-alpine
+#     volumes:
+#       - ./directus/database:/var/lib/postgresql/data
+#     environment:
+#       POSTGRES_USER: 'directus'
+#       POSTGRES_PASSWORD: 'directus'
+#       POSTGRES_DB: 'directus'

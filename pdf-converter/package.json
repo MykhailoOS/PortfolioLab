@@ -1,0 +1,8 @@
+{
+  "name": "html-to-pdf-converter",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}

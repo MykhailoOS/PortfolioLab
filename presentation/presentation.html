@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Maker Pro - Project Presentation</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .slide {
+            width: 297mm;
+            height: 210mm;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .slide:last-child {
+            page-break-after: auto;
+        }
+        
+        /* Title Slide */
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .title-slide h1 {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .title-slide .subtitle {
+            font-size: 32px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .title-slide .tagline {
+            font-size: 24px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        /* Content Slides */
+        .content-slide {
+            background: white;
+            padding: 60px 80px;
+        }
+        
+        .slide-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 80px;
+            margin: -60px -80px 40px;
+        }
+        
+        .slide-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+        }
+        
+        .slide-header .number {
+            font-size: 24px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .slide-content {
+            flex: 1;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        
+        .feature-box h3 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+        
+        .feature-box p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .benefit-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .benefit-item h3 {
+            font-size: 22px;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-item p {
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            color: #667eea;
+            border: 2px solid #e9ecef;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .stat-box .number {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-box .label {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            right: 80px;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide title-slide">
+    <h1>Portfolio Maker Pro</h1>
+    <div class="subtitle">3D Portfolio Constructor Platform</div>
+    <div class="tagline">Build stunning portfolios with ease • No coding required • Professional results</div>
+</div>
+
+<!-- Slide 2: Project Overview -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">01</div>
+        <h2>Project Overview</h2>
+    </div>
+    <div class="slide-content">
+        <div class="two-column">
+            <div>
+                <h3 style="font-size: 28px; margin-bottom: 20px; color: #667eea;">What is Portfolio Maker Pro?</h3>
+                <p style="font-size: 18px; line-height: 1.8; margin-bottom: 20px;">
+                    A modern, feature-rich <strong>web-based portfolio builder</strong> that enables students, professionals, 
+                    and creatives to design and deploy stunning portfolio websites without writing a single line of code.
+                </p>
+                <p style="font-size: 18px; line-height: 1.8;">
+                    Built with cutting-edge web technologies, it combines an intuitive drag-and-drop interface with 
+                    powerful features like <span class="highlight">real-time preview</span>, 
+                    <span class="highlight">multilingual support</span>, and 
+                    <span class="highlight">3D visual effects</span>.
+                </p>
+            </div>
+            <div>
+                <h3 style="font-size: 28px; margin-bottom: 20px; color: #667eea;">Target Audience</h3>
+                <ul>
+                    <li><strong>Students:</strong> Showcase academic projects and skills</li>
+                    <li><strong>Developers:</strong> Display coding portfolio and GitHub projects</li>
+                    <li><strong>Designers:</strong> Present creative work and case studies</li>
+                    <li><strong>Freelancers:</strong> Professional client-facing portfolios</li>
+                    <li><strong>Job Seekers:</strong> Stand out in competitive job markets</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 3: Key Features -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">02</div>
+        <h2>Key Features</h2>
+    </div>
+    <div class="slide-content">
+        <div class="feature-grid">
+            <div class="feature-box">
+                <h3>🎨 Visual Editor</h3>
+                <p>Drag-and-drop interface with real-time preview. See changes instantly as you build your portfolio.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🌍 Multilingual Support</h3>
+                <p>Create portfolios in 4 languages: English, Ukrainian, Russian, and Polish. Perfect for international audiences.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📱 Responsive Design</h3>
+                <p>Preview and optimize for desktop, tablet, and mobile devices. Your portfolio looks great everywhere.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🎭 3D Effects</h3>
+                <p>Optional Three.js integration for stunning visual effects in hero sections. Make a lasting impression.</p>
+            </div>
+            <div class="feature-box">
+                <h3>💾 Cloud Storage</h3>
+                <p>Projects saved to Strapi backend. Access your work from anywhere, never lose progress.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🖼️ Media Management</h3>
+                <p>Upload and manage images with automatic optimization. Built-in validation and accessibility support.</p>
+            </div>
+            <div class="feature-box">
+                <h3>⚡ Auto-Save</h3>
+                <p>Changes saved automatically every 500ms. Focus on creating, not on clicking save buttons.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🎯 Section Library</h3>
+                <p>Pre-built sections: Hero, About, Skills, Projects, Contact. Mix and match to create unique layouts.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 4: Benefits for Students -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">03</div>
+        <h2>Benefits for Students</h2>
+    </div>
+    <div class="slide-content">
+        <div class="benefit-item">
+            <h3>🎓 Showcase Academic Projects</h3>
+            <p>Display coursework, research papers, and group projects with rich media support. Add descriptions, tags, and links to GitHub repositories or live demos.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>💼 Career Preparation</h3>
+            <p>Build a professional online presence before graduation. Stand out in internship and job applications with a polished portfolio that highlights your skills and achievements.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>🚀 No Technical Barriers</h3>
+            <p>Focus on content and design, not on learning complex web development frameworks. No HTML, CSS, or JavaScript knowledge required—just drag, drop, and customize.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>💰 Free to Use</h3>
+            <p>Open-source project with no subscription fees. Self-host or use the free tier of Strapi Cloud. Perfect for students on a budget.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>🌐 Learn by Doing</h3>
+            <p>Explore modern web technologies through a user-friendly interface. Understand project structure, API integration, and responsive design principles by examining the codebase.</p>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 5: Benefits for Professionals -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">04</div>
+        <h2>Benefits for Professionals</h2>
+    </div>
+    <div class="slide-content">
+        <div class="benefit-item">
+            <h3>⚡ Rapid Deployment</h3>
+            <p>Create and launch professional portfolios in minutes, not days. Perfect for freelancers who need to respond quickly to client inquiries.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>🎨 Complete Control</h3>
+            <p>Customize every aspect of your portfolio without coding. Choose layouts, add custom content, and manage multiple projects from a central dashboard.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>📊 Project Management</h3>
+            <p>Organize multiple portfolio versions for different clients or job applications. Archive old projects, create new ones, and switch between them seamlessly.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>🔄 Version Control</h3>
+            <p>Conflict detection prevents data loss when editing from multiple devices. Always know when your content is out of sync with the server.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>🌍 Global Reach</h3>
+            <p>Multilingual support lets you target international markets. Create separate language versions or use the built-in locale switcher for dynamic content.</p>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 6: Technical Architecture -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">05</div>
+        <h2>Technical Architecture</h2>
+    </div>
+    <div class="slide-content">
+        <h3 style="font-size: 28px; margin-bottom: 30px; color: #667eea;">Modern Tech Stack</h3>
+        <div class="tech-stack">
+            <div class="tech-item">React 19</div>
+            <div class="tech-item">TypeScript</div>
+            <div class="tech-item">Vite 6.4</div>
+            <div class="tech-item">Tailwind CSS</div>
+            <div class="tech-item">Three.js</div>
+            <div class="tech-item">Strapi v5</div>
+            <div class="tech-item">REST API</div>
+            <div class="tech-item">SQLite</div>
+        </div>
+        
+        <div style="margin-top: 50px;">
+            <h3 style="font-size: 28px; margin-bottom: 20px; color: #667eea;">Key Technical Features</h3>
+            <div class="two-column">
+                <ul>
+                    <li>Component-based architecture</li>
+                    <li>State management with useReducer</li>
+                    <li>Schema-driven dynamic forms</li>
+                    <li>Debounced autosave system</li>
+                </ul>
+                <ul>
+                    <li>JWT authentication & authorization</li>
+                    <li>RESTful API integration</li>
+                    <li>Client-side routing</li>
+                    <li>Real-time preview rendering</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 7: Implementation Highlights -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">06</div>
+        <h2>Implementation Highlights</h2>
+    </div>
+    <div class="slide-content">
+        <div class="feature-grid">
+            <div class="feature-box">
+                <h3>🔐 Authentication System</h3>
+                <p>Secure JWT-based login and registration. Protected routes ensure only authenticated users can access the dashboard and editor.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📂 Project Dashboard</h3>
+                <p>Professional project management interface with create, rename, archive, and delete operations. Grid view with status indicators.</p>
+            </div>
+            <div class="feature-box">
+                <h3>💾 Persistent Storage</h3>
+                <p>Full Strapi backend integration with automatic synchronization. Projects, pages, and blocks stored in relational database.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔄 Auto-Save</h3>
+                <p>Intelligent debounced save system with 500ms delay. Retry logic handles network failures. Flush on navigation prevents data loss.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🖼️ Image Upload</h3>
+                <p>Direct file upload to Strapi with validation. Support for PNG, JPEG, WEBP, AVIF. 5MB size limit with clear error messages.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📋 Schema-Driven Forms</h3>
+                <p>Dynamic field rendering based on JSON schemas. Add new fields without modifying UI code. Supports 8+ field types.</p>
+            </div>
+            <div class="feature-box">
+                <h3>⚠️ Conflict Detection</h3>
+                <p>Timestamp-based version conflict detection. Warning modal when server version is newer. 5-second grace period for autosave.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔒 Access Control</h3>
+                <p>Lifecycle hooks filter projects by owner. Users only see their own projects. Prevents cross-user data access.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 8: Project Statistics -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">07</div>
+        <h2>Project Statistics & Scope</h2>
+    </div>
+    <div class="slide-content">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="number">4</div>
+                <div class="label">Major Tasks Completed</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">15+</div>
+                <div class="label">React Components</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">8</div>
+                <div class="label">Field Types Supported</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">5</div>
+                <div class="label">Section Types</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">4</div>
+                <div class="label">Languages Supported</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">3</div>
+                <div class="label">Device Previews</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 50px;">
+            <h3 style="font-size: 28px; margin-bottom: 20px; color: #667eea;">Completed Features</h3>
+            <div class="two-column">
+                <ul style="font-size: 16px;">
+                    <li>Task 1: Image upload integration</li>
+                    <li>Task 2: Dashboard & project management</li>
+                    <li>Task 3: Authentication system</li>
+                    <li>Task 4: Persistent reopen flow</li>
+                </ul>
+                <ul style="font-size: 16px;">
+                    <li>Responsive mobile/tablet design</li>
+                    <li>Strapi v5 documentId support</li>
+                    <li>Autosave with conflict detection</li>
+                    <li>Security lifecycle hooks</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 9: Use Cases -->
+<div class="slide content-slide">
+    <div class="slide-header">
+        <div class="number">08</div>
+        <h2>Real-World Use Cases</h2>
+    </div>
+    <div class="slide-content">
+        <div class="two-column">
+            <div>
+                <div class="benefit-item">
+                    <h3>👨‍💻 Software Developer</h3>
+                    <p><strong>Scenario:</strong> Recent graduate needs to showcase coding projects for job interviews.</p>
+                    <p><strong>Solution:</strong> Creates portfolio with Hero, About, Skills, and Projects sections. Links GitHub repos, adds project descriptions in multiple languages.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <h3>🎨 Graphic Designer</h3>
+                    <p><strong>Scenario:</strong> Freelancer wants professional portfolio to send to potential clients.</p>
+                    <p><strong>Solution:</strong> Uses image upload feature for project thumbnails. Organizes work by categories using tags. Exports clean, responsive portfolio.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <h3>🎓 University Student</h3>
+                    <p><strong>Scenario:</strong> Computer Science student applying for internships needs to display coursework.</p>
+                    <p><strong>Solution:</strong> Documents semester projects with descriptions, tech stacks, and demo links. Updates portfolio each semester.</p>
+                </div>
+            </div>
+            
+            <div>
+                <div class="benefit-item">
+                    <h3>📝 Content Writer</h3>
+                    <p><strong>Scenario:</strong> Writer needs portfolio in English and Russian for international clients.</p>
+                    <p><strong>Solution:</strong> Uses multilingual support to create content in both languages. Links to published articles and blog posts.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <h3>🚀 Startup Founder</h3>
+                    <p><strong>Scenario:</strong> Entrepreneur wants landing page for product showcase.</p>
+                    <p><strong>Solution:</strong> Builds single-page portfolio with product features, testimonials (Projects section), and contact form.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <h3>🎯 Marketing Specialist</h3>
+                    <p><strong>Scenario:</strong> Marketer needs to display campaign results and case studies.</p>
+                    <p><strong>Solution:</strong> Creates data-driven portfolio with project cards showing metrics, screenshots, and campaign outcomes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Portfolio Maker Pro • 2025</div>
+</div>
+
+<!-- Slide 10: Conclusion -->
+<div class="slide title-slide">
+    <h1 style="font-size: 64px; margin-bottom: 30px;">Why Portfolio Maker Pro?</h1>
+    
+    <div style="text-align: left; max-width: 800px; font-size: 24px; line-height: 1.8;">
+        <div style="margin-bottom: 20px;">
+            ✓ <strong>Easy to Use:</strong> No coding required, intuitive interface
+        </div>
+        <div style="margin-bottom: 20px;">
+            ✓ <strong>Feature-Rich:</strong> Everything you need in one platform
+        </div>
+        <div style="margin-bottom: 20px;">
+            ✓ <strong>Professional Results:</strong> Stunning portfolios that impress
+        </div>
+        <div style="margin-bottom: 20px;">
+            ✓ <strong>Always Accessible:</strong> Cloud-based, work from anywhere
+        </div>
+        <div style="margin-bottom: 20px;">
+            ✓ <strong>Open Source:</strong> Free to use, customize, and extend
+        </div>
+    </div>
+    
+    <div style="margin-top: 50px; font-size: 28px; font-weight: 600;">
+        Start building your portfolio today!
+    </div>
+</div>
+
+</body>
+</html>
