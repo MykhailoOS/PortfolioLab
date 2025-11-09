@@ -13,12 +13,23 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'import.meta.env.VITE_STRAPI_URL': JSON.stringify(env.VITE_STRAPI_URL),
-        'import.meta.env.VITE_STRAPI_TOKEN': JSON.stringify(env.VITE_STRAPI_TOKEN)
       },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
+        }
+      },
+      build: {
+        chunkSizeWarningLimit: 1000, // Increase to 1MB (removes warning)
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              // Split vendor code into separate chunks
+              'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+              'three-vendor': ['three'],
+              'supabase-vendor': ['@supabase/supabase-js'],
+            }
+          }
         }
       }
     };
