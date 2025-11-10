@@ -397,6 +397,9 @@ export default function App() {
                 key={selectedSectionId} // Re-mount inspector on selection change
                 section={selectedSection}
                 onUpdate={handleUpdateSection}
+                onUpdateMetadata={(sectionId, metadata) => {
+                  dispatch({ type: 'UPDATE_SECTION_METADATA', payload: { sectionId, metadata } });
+                }}
                 activeLocale={activeLocale}
                 onClose={() => setInspectorOpen(false)}
               />

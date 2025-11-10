@@ -60,9 +60,10 @@ const SimpleInput: React.FC<{
 export const Inspector: React.FC<{
   section: Section | undefined;
   onUpdate: (sectionId: string, data: any) => void;
+  onUpdateMetadata?: (sectionId: string, metadata: Partial<Section>) => void;
   activeLocale: Locale;
   onClose: () => void;
-}> = ({ section, onUpdate, activeLocale, onClose }) => {
+}> = ({ section, onUpdate, onUpdateMetadata, activeLocale, onClose }) => {
   if (!section) {
     return (
       <div className="w-full h-full bg-brand-dark p-4 flex flex-col text-brand-mist">
@@ -95,6 +96,34 @@ export const Inspector: React.FC<{
                     <LocalizedInput label="Headline" field="headline" value={data.headline} activeLocale={activeLocale} onChange={handleLocalizedChange} />
                     <LocalizedInput label="Subheadline" field="subheadline" value={data.subheadline} activeLocale={activeLocale} onChange={handleLocalizedChange} isTextarea/>
                     <LocalizedInput label="CTA Button" field="ctaButton" value={data.ctaButton} activeLocale={activeLocale} onChange={handleLocalizedChange} />
+                    
+                    <SimpleInput 
+                        label="Button Link" 
+                        field="ctaLink" 
+                        value={data.ctaLink || ''} 
+                        onChange={handleDataChange}
+                        placeholder="https://example.com or #contact"
+                    />
+                    
+                    <div className="mb-4">
+                        <label htmlFor="ctaColor" className="block text-sm font-medium text-brand-mist mb-1">Button Color</label>
+                        <div className="flex gap-2">
+                            <input 
+                                type="color" 
+                                id="ctaColor"
+                                value={data.ctaColor || '#8b5cf6'}
+                                onChange={(e) => handleDataChange('ctaColor', e.target.value)}
+                                className="w-16 h-10 border border-gray-600 rounded cursor-pointer"
+                            />
+                            <input 
+                                type="text" 
+                                value={data.ctaColor || '#8b5cf6'}
+                                onChange={(e) => handleDataChange('ctaColor', e.target.value)}
+                                placeholder="#8b5cf6"
+                                className="flex-1 p-2 bg-brand-night border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-accent"
+                            />
+                        </div>
+                    </div>
                 </>
             );
 
@@ -286,8 +315,69 @@ export const Inspector: React.FC<{
         <h2 className="text-xl font-bold">{section.type.charAt(0).toUpperCase() + section.type.slice(1)} Section</h2>
         <button onClick={onClose} className="md:hidden text-brand-mist hover:text-white"><X size={24} /></button>
       </div>
-      <div className="flex-grow overflow-y-auto">
-        {renderFields()}
+      <div className="flex-grow overflow-y-auto space-y-6">
+        {/* Content Fields */}
+        <div>
+          {renderFields()}
+        </div>
+
+        {/* Visual Effects Section */}
+        {onUpdateMetadata && (
+          <div className="border-t border-gray-700 pt-6">
+            <h3 className="text-lg font-semibold mb-4">Visual Effects</h3>
+            
+            {/* Parallax */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-brand-mist mb-1">
+                Parallax Intensity ({(section.effects?.parallax || 0).toFixed(1)})
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={section.effects?.parallax || 0}
+                onChange={(e) => onUpdateMetadata(section.id, {
+                  effects: { ...section.effects, parallax: parseFloat(e.target.value) }
+                })}
+                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-brand-accent"
+              />
+              <p className="text-xs text-brand-mist mt-1">Scroll-based movement effect</p>
+            </div>
+
+            {/* Blur */}
+            <div className="mb-4">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={section.effects?.blur || false}
+                  onChange={(e) => onUpdateMetadata(section.id, {
+                    effects: { ...section.effects, blur: e.target.checked }
+                  })}
+                  className="w-4 h-4 accent-brand-accent"
+                />
+                <span className="ml-2 text-sm font-medium text-brand-mist">Enable Blur Effect</span>
+              </label>
+              <p className="text-xs text-brand-mist mt-1 ml-6">Subtle background blur</p>
+            </div>
+
+            {/* 3D Effect */}
+            <div className="mb-4">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={section.effects?.has3d || false}
+                  onChange={(e) => onUpdateMetadata(section.id, {
+                    effects: { ...section.effects, has3d: e.target.checked }
+                  })}
+                  className="w-4 h-4 accent-brand-accent"
+                />
+                <span className="ml-2 text-sm font-medium text-brand-mist">Enable 3D Effect</span>
+              </label>
+              <p className="text-xs text-brand-mist mt-1 ml-6">Interactive 3D transforms</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

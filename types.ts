@@ -68,6 +68,8 @@ export type HeroSectionData = {
   headline: LocalizedString;
   subheadline: LocalizedString;
   ctaButton: LocalizedString;
+  ctaLink?: string; // Link for CTA button
+  ctaColor?: string; // Button color (hex)
 };
 
 export type AboutSectionData = {

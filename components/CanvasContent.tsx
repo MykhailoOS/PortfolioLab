@@ -25,6 +25,9 @@ const HeroSection: React.FC<{ data: any; locale: Locale; effects: any }> = ({ da
   const prefersReducedMotion = usePrefersReducedMotion();
   const show3D = effects.has3d && !prefersReducedMotion;
 
+  const buttonColor = data.ctaColor || '#8b5cf6';
+  const buttonLink = data.ctaLink || '#';
+
   return (
     <div className="min-h-screen flex items-center justify-center text-center relative overflow-hidden bg-brand-dark text-white p-4">
       {show3D ? (
@@ -37,9 +40,13 @@ const HeroSection: React.FC<{ data: any; locale: Locale; effects: any }> = ({ da
       <div className={`relative z-10 p-6 rounded-xl ${effects.blur ? 'bg-black/30 backdrop-blur-lg' : ''}`}>
         <h1 className="text-4xl md:text-7xl font-extrabold mb-4 leading-tight">{data.headline?.[locale]}</h1>
         <p className="text-lg md:text-2xl text-brand-mist max-w-3xl mx-auto mb-8">{data.subheadline?.[locale]}</p>
-        <button className="bg-brand-accent text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-purple-700 transition-transform hover:scale-105">
+        <a 
+          href={buttonLink}
+          style={{ backgroundColor: buttonColor }}
+          className="inline-block text-white px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all hover:scale-105"
+        >
           {data.ctaButton?.[locale]}
-        </button>
+        </a>
       </div>
     </div>
   );
