@@ -59,8 +59,10 @@ export default function App() {
   const [portfolio, dispatch] = useReducer(portfolioReducer, INITIAL_PORTFOLIO_DATA);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [activeLocale, setActiveLocale] = useState<Locale>('en');
-  const [isLibraryOpen, setLibraryOpen] = useState(false);
-  const [isInspectorOpen, setInspectorOpen] = useState(false);
+  const [isLibraryOpen, setLibraryOpen] = useState(false); // Mobile library
+  const [isInspectorOpen, setInspectorOpen] = useState(false); // Mobile inspector
+  const [isLibraryVisibleDesktop, setLibraryVisibleDesktop] = useState(true); // Desktop library
+  const [isInspectorVisibleDesktop, setInspectorVisibleDesktop] = useState(true); // Desktop inspector
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop');
   const [justAddedSectionId, setJustAddedSectionId] = useState<string | null>(null);
   
@@ -370,13 +372,23 @@ export default function App() {
         </div>
        
         {/* Library (Desktop Sidebar / Mobile Drawer) */}
-        <div className={`fixed md:relative z-50 inset-y-0 left-0 transform ${isLibraryOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out`}>
+        <div className={`fixed md:relative z-50 inset-y-0 left-0 transform ${isLibraryOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out ${!isLibraryVisibleDesktop ? 'md:!-translate-x-full md:w-0' : ''}`}>
             <Library onAddSection={handleAddSection} />
              <button onClick={() => setLibraryOpen(false)} className="md:hidden absolute top-4 right-4 text-brand-mist hover:text-white">
                 <X size={24} />
             </button>
         </div>
         {isLibraryOpen && <div onClick={()=>setLibraryOpen(false)} className="md:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in" />}
+        
+        {/* Desktop Toggle Button for Library */}
+        <button 
+          onClick={() => setLibraryVisibleDesktop(!isLibraryVisibleDesktop)}
+          className="hidden md:block fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-brand-accent text-white p-2 rounded-r-lg shadow-lg hover:bg-purple-700 transition-all"
+          style={{ left: isLibraryVisibleDesktop ? '280px' : '0' }}
+          title={isLibraryVisibleDesktop ? 'Hide Library' : 'Show Library'}
+        >
+          {isLibraryVisibleDesktop ? '«' : '»'}
+        </button>
         
         {/* Canvas */}
         <div className="flex-grow h-full overflow-y-auto bg-brand-night transition-all duration-300 ease-in-out">
@@ -390,8 +402,18 @@ export default function App() {
           />
         </div>
         
+        {/* Desktop Toggle Button for Inspector */}
+        <button 
+          onClick={() => setInspectorVisibleDesktop(!isInspectorVisibleDesktop)}
+          className="hidden md:block fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-brand-accent text-white p-2 rounded-l-lg shadow-lg hover:bg-purple-700 transition-all"
+          style={{ right: isInspectorVisibleDesktop ? '350px' : '0' }}
+          title={isInspectorVisibleDesktop ? 'Hide Inspector' : 'Show Inspector'}
+        >
+          {isInspectorVisibleDesktop ? '»' : '«'}
+        </button>
+        
         {/* Inspector (Desktop Sidebar / Mobile Bottom Sheet) */}
-        <div className={`fixed z-50 bottom-0 left-0 right-0 md:relative md:inset-y-0 md:right-0 md:transform-none transition-transform duration-300 ease-in-out ${isInspectorOpen ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0`}>
+        <div className={`fixed z-50 bottom-0 left-0 right-0 md:relative md:inset-y-0 md:right-0 md:transform-none transition-transform duration-300 ease-in-out ${isInspectorOpen ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 ${!isInspectorVisibleDesktop ? 'md:!translate-x-full md:w-0' : ''}`}>
           <div className="bg-brand-dark md:w-[350px] h-[75dvh] md:h-full flex flex-col animate-sheet-in md:animate-none">
             <Inspector
                 key={selectedSectionId} // Re-mount inspector on selection change
