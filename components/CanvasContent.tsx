@@ -86,10 +86,8 @@ const AboutSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceVie
 };
 
 const SkillsSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceView }> = ({ data, locale, deviceView = 'desktop' }) => {
-    // Determine grid columns based on device view
-    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 
-                     deviceView === 'tablet' ? 'grid-cols-2' : 
-                     'grid-cols-3';
+    // Determine grid columns based on device view - tablet and desktop both use 3 cols
+    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 'grid-cols-3';
     
     return (
         <div className="py-24 px-6 bg-brand-night">
