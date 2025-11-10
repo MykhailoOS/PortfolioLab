@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import type { Section, Locale, SocialPlatform, SocialLink } from '../types';
+import type { Section, Locale, SocialPlatform, SocialLink, DeviceView } from '../types';
 import { SectionType } from '../types';
 import { Github, Linkedin, Twitter, Mail, Send, Instagram } from 'lucide-react';
 
@@ -21,7 +21,7 @@ const usePrefersReducedMotion = () => {
 
 
 // Individual Section Components
-const HeroSection: React.FC<{ data: any; locale: Locale; effects: any }> = ({ data, locale, effects }) => {
+const HeroSection: React.FC<{ data: any; locale: Locale; effects: any; deviceView?: DeviceView }> = ({ data, locale, effects }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const show3D = effects.has3d && !prefersReducedMotion;
 
@@ -52,7 +52,7 @@ const HeroSection: React.FC<{ data: any; locale: Locale; effects: any }> = ({ da
   );
 };
 
-const AboutSection: React.FC<{ data: any; locale: Locale }> = ({ data, locale }) => {
+const AboutSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceView }> = ({ data, locale }) => {
     // Support both new MediaRef structure and legacy imageUrl
     const imageUrl = data.avatar?.url || data.imageUrl;
     const imageAlt = data.avatar?.alt || 'About me';
@@ -85,27 +85,39 @@ const AboutSection: React.FC<{ data: any; locale: Locale }> = ({ data, locale })
     );
 };
 
-const SkillsSection: React.FC<{ data: any; locale: Locale }> = ({ data, locale }) => (
-    <div className="py-24 px-6 bg-brand-night">
-        <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8">
-            {data.skills?.map((skill: any) => (
-                <div key={skill.id} className="text-center">
-                    <p className="font-semibold text-lg mb-2">{skill.name}</p>
-                    <div className="w-full bg-gray-700 rounded-full h-2.5">
-                        <div className="bg-brand-accent h-2.5 rounded-full" style={{ width: `${skill.level}%` }}></div>
+const SkillsSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceView }> = ({ data, locale, deviceView = 'desktop' }) => {
+    // Determine grid columns based on device view
+    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 
+                     deviceView === 'tablet' ? 'grid-cols-2' : 
+                     'grid-cols-3';
+    
+    return (
+        <div className="py-24 px-6 bg-brand-night">
+            <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
+            <div className={`max-w-4xl mx-auto grid ${gridCols} gap-8`}>
+                {data.skills?.map((skill: any) => (
+                    <div key={skill.id} className="text-center">
+                        <p className="font-semibold text-lg mb-2">{skill.name}</p>
+                        <div className="w-full bg-gray-700 rounded-full h-2.5">
+                            <div className="bg-brand-accent h-2.5 rounded-full" style={{ width: `${skill.level}%` }}></div>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
-const ProjectsSection: React.FC<{ data: any; locale: Locale }> = ({ data, locale }) => {
+const ProjectsSection: React.FC<{ data: any; locale: Locale; deviceView: DeviceView }> = ({ data, locale, deviceView }) => {
+    // Determine grid columns based on device view
+    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 
+                     deviceView === 'tablet' ? 'grid-cols-2' : 
+                     'grid-cols-3';
+    
     return (
         <div className="py-24 px-6">
             <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className={`grid ${gridCols} gap-8`}>
                 {data.projects?.map((project: any) => {
                     // Support both new MediaRef structure and legacy imageUrl
                     const imageUrl = project.image?.url || project.imageUrl;
@@ -154,7 +166,7 @@ const socialIconMap: Record<SocialPlatform, React.ReactNode> = {
     instagram: <Instagram size={28}/>,
 };
 
-const ContactSection: React.FC<{ data: any; locale: Locale, effects: any }> = ({ data, locale, effects }) => (
+const ContactSection: React.FC<{ data: any; locale: Locale, effects: any; deviceView?: DeviceView }> = ({ data, locale, effects }) => (
     <div className={`py-24 px-6 text-center relative ${effects.blur ? 'bg-brand-night/50 backdrop-blur-md' : 'bg-brand-night'}`}>
         <h2 className="text-4xl font-bold mb-4">{data.title?.[locale]}</h2>
         <a href={`mailto:${data.email}`} className="text-2xl text-brand-accent hover:underline inline-flex items-center gap-2">
@@ -189,7 +201,8 @@ export const CanvasContent: React.FC<{
   handleDragStart?: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
   handleDragEnter?: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
   handleDragEnd?: () => void;
-}> = ({ sections, activeLocale, isExport, selectedSectionId, onSelectSection, handleDragStart, handleDragEnter, handleDragEnd }) => {
+  deviceView?: DeviceView;
+}> = ({ sections, activeLocale, isExport, selectedSectionId, onSelectSection, handleDragStart, handleDragEnter, handleDragEnd, deviceView = 'desktop' }) => {
   return (
     <>
       {sections.map((section, index) => {
@@ -212,7 +225,7 @@ export const CanvasContent: React.FC<{
             className={`section-wrapper relative ${!isExport ? 'cursor-pointer hover:outline-dashed hover:outline-2 hover:outline-brand-accent' : ''} ${selectedSectionId === section.id ? 'outline outline-2 outline-brand-accent' : ''}`}
             {...wrapperProps}
           >
-            <Component data={section.data} locale={activeLocale} effects={section.effects} />
+            <Component data={section.data} locale={activeLocale} effects={section.effects} deviceView={deviceView} />
           </div>
         );
       })}

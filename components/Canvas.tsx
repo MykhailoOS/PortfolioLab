@@ -52,6 +52,7 @@ export const Canvas: React.FC<{
             handleDragStart={handleDragStart}
             handleDragEnter={handleDragEnter}
             handleDragEnd={handleDragEnd}
+            deviceView={deviceView}
         />
       </div>
     </div>
