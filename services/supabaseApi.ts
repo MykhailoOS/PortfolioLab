@@ -234,3 +234,45 @@ export async function autosaveProject(projectId: string, blocks: Block[]) {
 
   await Promise.all(updates);
 }
+
+// ========== FILE UPLOAD ==========
+
+export async function uploadFile(file: File): Promise<string> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  // Generate unique filename
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+  // Upload to Supabase Storage
+  const { data, error } = await supabase.storage
+    .from('portfolio-images')
+    .upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (error) throw error;
+
+  // Get public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from('portfolio-images')
+    .getPublicUrl(data.path);
+
+  return publicUrl;
+}
+
+export async function deleteFile(url: string): Promise<void> {
+  // Extract path from URL
+  const urlParts = url.split('/portfolio-images/');
+  if (urlParts.length < 2) return;
+  
+  const filePath = urlParts[1];
+
+  const { error } = await supabase.storage
+    .from('portfolio-images')
+    .remove([filePath]);
+
+  if (error) throw error;
+}

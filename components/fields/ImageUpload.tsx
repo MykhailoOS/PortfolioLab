@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import type { MediaRef } from '../../types';
-import { uploadFileToDirectus, validateFile, getDirectusThumbnail } from '../../services/directus';
+import { uploadFile } from '../../services/supabaseApi';
 
 interface ImageUploadProps {
   value?: MediaRef;
@@ -10,6 +10,8 @@ interface ImageUploadProps {
   helpText?: string;
   accept?: string[];
 }
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
@@ -29,23 +31,52 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
     setError(null);
 
-    // Validate file
-    const validationError = validateFile(file);
-    if (validationError) {
-      setError(validationError.message);
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      setError(`File too large. Max size is ${MAX_FILE_SIZE / 1024 / 1024} MB`);
+      return;
+    }
+
+    // Validate file type
+    if (!accept.includes(file.type)) {
+      setError('Invalid file type. Please upload a PNG, JPEG, WEBP, or AVIF image');
       return;
     }
 
     // Upload file
     setIsUploading(true);
     try {
-      const mediaRef = await uploadFileToDirectus(file);
+      const url = await uploadFile(file);
+      
+      // Get image dimensions
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+      
       // Set default alt text to filename if not already set
       const altTextValue = altText || file.name.replace(/\.[^/.]+$/, '');
-      const updatedMediaRef = { ...mediaRef, alt: altTextValue };
+      
+      const mediaRef: MediaRef = {
+        url,
+        alt: altTextValue,
+        metadata: {
+          filename: file.name,
+          size: file.size,
+          mime: file.type,
+          width: img.width,
+          height: img.height,
+        }
+      };
+      
       setAltText(altTextValue);
-      onChange(updatedMediaRef);
+      onChange(mediaRef);
+      
+      // Clean up
+      URL.revokeObjectURL(img.src);
     } catch (err) {
+      console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);

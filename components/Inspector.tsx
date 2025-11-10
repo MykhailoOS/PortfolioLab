@@ -315,69 +315,8 @@ export const Inspector: React.FC<{
         <h2 className="text-xl font-bold">{section.type.charAt(0).toUpperCase() + section.type.slice(1)} Section</h2>
         <button onClick={onClose} className="md:hidden text-brand-mist hover:text-white"><X size={24} /></button>
       </div>
-      <div className="flex-grow overflow-y-auto space-y-6">
-        {/* Content Fields */}
-        <div>
-          {renderFields()}
-        </div>
-
-        {/* Visual Effects Section */}
-        {onUpdateMetadata && (
-          <div className="border-t border-gray-700 pt-6">
-            <h3 className="text-lg font-semibold mb-4">Visual Effects</h3>
-            
-            {/* Parallax */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-brand-mist mb-1">
-                Parallax Intensity ({(section.effects?.parallax || 0).toFixed(1)})
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={section.effects?.parallax || 0}
-                onChange={(e) => onUpdateMetadata(section.id, {
-                  effects: { ...section.effects, parallax: parseFloat(e.target.value) }
-                })}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-brand-accent"
-              />
-              <p className="text-xs text-brand-mist mt-1">Scroll-based movement effect</p>
-            </div>
-
-            {/* Blur */}
-            <div className="mb-4">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={section.effects?.blur || false}
-                  onChange={(e) => onUpdateMetadata(section.id, {
-                    effects: { ...section.effects, blur: e.target.checked }
-                  })}
-                  className="w-4 h-4 accent-brand-accent"
-                />
-                <span className="ml-2 text-sm font-medium text-brand-mist">Enable Blur Effect</span>
-              </label>
-              <p className="text-xs text-brand-mist mt-1 ml-6">Subtle background blur</p>
-            </div>
-
-            {/* 3D Effect */}
-            <div className="mb-4">
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={section.effects?.has3d || false}
-                  onChange={(e) => onUpdateMetadata(section.id, {
-                    effects: { ...section.effects, has3d: e.target.checked }
-                  })}
-                  className="w-4 h-4 accent-brand-accent"
-                />
-                <span className="ml-2 text-sm font-medium text-brand-mist">Enable 3D Effect</span>
-              </label>
-              <p className="text-xs text-brand-mist mt-1 ml-6">Interactive 3D transforms</p>
-            </div>
-          </div>
-        )}
+      <div className="flex-grow overflow-y-auto">
+        {renderFields()}
       </div>
     </div>
   );

@@ -363,7 +363,7 @@ export default function App() {
         saveError={saveError}
         onBackToDashboard={flush}
       />
-      <main className="flex-grow flex w-full h-[calc(100vh-4rem)]">
+      <main className="flex-grow flex w-full h-[calc(100vh-4rem)] overflow-x-hidden">
         {/* Mobile FABs */}
         <div className="md:hidden fixed bottom-4 left-4 z-40">
            <button onClick={() => setLibraryOpen(true)} className="bg-brand-accent text-white p-4 rounded-full shadow-lg">

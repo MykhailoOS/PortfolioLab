@@ -11,8 +11,8 @@ export type Locale = 'en' | 'ua' | 'ru' | 'pl';
 export type DeviceView = 'desktop' | 'tablet' | 'mobile';
 
 export interface MediaRef {
-  id: string; // Directus file ID
-  url: string; // Permanent URL: <DIRECTUS_URL>/assets/<id>
+  id?: string; // Optional: used for backward compatibility with Directus
+  url: string; // Public URL to the image
   alt: string; // Alt text for accessibility (required when image exists)
   metadata?: {
     filename?: string;
