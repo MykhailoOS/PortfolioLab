@@ -86,13 +86,13 @@ const AboutSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceVie
 };
 
 const SkillsSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceView }> = ({ data, locale, deviceView = 'desktop' }) => {
-    // Determine grid columns based on device view - tablet and desktop both use 3 cols
-    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 'grid-cols-3';
+    // For preview mode, use deviceView. For real devices, use Tailwind breakpoints
+    const gridClasses = deviceView === 'mobile' ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3';
     
     return (
         <div className="py-24 px-6 bg-brand-night">
             <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-            <div className={`max-w-4xl mx-auto grid ${gridCols} gap-8`}>
+            <div className={`max-w-4xl mx-auto grid ${gridClasses} gap-8`}>
                 {data.skills?.map((skill: any) => (
                     <div key={skill.id} className="text-center">
                         <p className="font-semibold text-lg mb-2">{skill.name}</p>
@@ -107,15 +107,15 @@ const SkillsSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceVi
 };
 
 const ProjectsSection: React.FC<{ data: any; locale: Locale; deviceView: DeviceView }> = ({ data, locale, deviceView }) => {
-    // Determine grid columns based on device view
-    const gridCols = deviceView === 'mobile' ? 'grid-cols-1' : 
-                     deviceView === 'tablet' ? 'grid-cols-2' : 
-                     'grid-cols-3';
+    // For preview mode, use deviceView. For real devices, use Tailwind breakpoints
+    const gridClasses = deviceView === 'mobile' ? 'grid-cols-1' : 
+                        deviceView === 'tablet' ? 'grid-cols-1 md:grid-cols-2' : 
+                        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
     
     return (
         <div className="py-24 px-6">
             <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-            <div className={`grid ${gridCols} gap-8`}>
+            <div className={`grid ${gridClasses} gap-8`}>
                 {data.projects?.map((project: any) => {
                     // Support both new MediaRef structure and legacy imageUrl
                     const imageUrl = project.image?.url || project.imageUrl;
