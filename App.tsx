@@ -150,12 +150,13 @@ export default function App() {
     enabled: !isLoading && projectData != null,
     delay: 500,
     onSave: async (sections) => {
-      // Save each section that has a block ID
-      const savePromises = sections
-        .filter(section => section._strapiDocumentId)
-        .map(async (section) => {
-          try {
-            const updated = await updateBlock(section._strapiDocumentId!, {
+      if (!projectData) return;
+      
+      const savePromises = sections.map(async (section, index) => {
+        try {
+          // If section already has a Supabase ID, update it
+          if (section._strapiDocumentId) {
+            const updated = await updateBlock(section._strapiDocumentId, {
               data: {
                 sectionData: section.data,
                 effects: section.effects,
@@ -174,17 +175,42 @@ export default function App() {
             }
             
             return updated;
-          } catch (err: any) {
-            console.error(`❌ Failed to save section ${section.id}:`, err);
-            throw err;
+          } else {
+            // Section doesn't have ID yet - create it in Supabase
+            console.log('📝 Creating new block for section:', section.id);
+            const newBlock = await createBlock(
+              projectData.id,
+              section.type,
+              {
+                sectionData: section.data,
+                effects: section.effects || { parallax: 0, blur: false, has3d: false },
+              },
+              index
+            );
+            
+            // Update section with new block metadata
+            dispatch({
+              type: 'UPDATE_SECTION_METADATA',
+              payload: {
+                sectionId: section.id,
+                metadata: {
+                  _strapiDocumentId: newBlock.id,
+                  _strapiUpdatedAt: newBlock.updated_at
+                },
+              },
+            });
+            
+            return newBlock;
           }
-        });
+        } catch (err: any) {
+          console.error(`❌ Failed to save section ${section.id}:`, err);
+          throw err;
+        }
+      });
       
       await Promise.all(savePromises);
     },
-  });
-
-  const selectedSection = useMemo(() => 
+  });  const selectedSection = useMemo(() => 
     portfolio.sections.find((s) => s.id === selectedSectionId), 
     [portfolio.sections, selectedSectionId]
   );
