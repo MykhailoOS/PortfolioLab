@@ -92,16 +92,20 @@ const SkillsSection: React.FC<{ data: any; locale: Locale; deviceView?: DeviceVi
     return (
         <div className="py-24 px-6 bg-brand-night">
             <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-            <div className={`max-w-4xl mx-auto grid ${gridClasses} gap-8`}>
-                {data.skills?.map((skill: any) => (
-                    <div key={skill.id} className="text-center">
-                        <p className="font-semibold text-lg mb-2">{skill.name}</p>
-                        <div className="w-full bg-gray-700 rounded-full h-2.5">
-                            <div className="bg-brand-accent h-2.5 rounded-full" style={{ width: `${skill.level}%` }}></div>
+            {data.skills && data.skills.length > 0 ? (
+                <div className={`max-w-4xl mx-auto grid ${gridClasses} gap-8`}>
+                    {data.skills.map((skill: any) => (
+                        <div key={skill.id} className="text-center">
+                            <p className="font-semibold text-lg mb-2">{skill.name}</p>
+                            <div className="w-full bg-gray-700 rounded-full h-2.5">
+                                <div className="bg-brand-accent h-2.5 rounded-full" style={{ width: `${skill.level || 0}%` }}></div>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-center text-brand-mist">No skills added yet. Edit this section to add skills.</p>
+            )}
         </div>
     );
 };
@@ -115,43 +119,47 @@ const ProjectsSection: React.FC<{ data: any; locale: Locale; deviceView: DeviceV
     return (
         <div className="py-24 px-6">
             <h2 className="text-4xl font-bold text-center mb-12">{data.title?.[locale]}</h2>
-            <div className={`grid ${gridClasses} gap-8`}>
-                {data.projects?.map((project: any) => {
-                    // Support both new MediaRef structure and legacy imageUrl
-                    const imageUrl = project.image?.url || project.imageUrl;
-                    const imageAlt = project.image?.alt || project.title?.[locale] || 'Project image';
-                    
-                    return (
-                        <div key={project.id} className="bg-brand-night rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-brand-accent/20">
-                            {imageUrl && (
-                                <img 
-                                    src={imageUrl} 
-                                    alt={imageAlt} 
-                                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" 
-                                />
-                            )}
-                            <div className="p-6">
-                                <h3 className="text-2xl font-bold mb-2">{project.title?.[locale]}</h3>
-                                <p className="text-brand-mist mb-4">{project.description?.[locale]}</p>
-                                {project.tags && project.tags.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {project.tags.map((tag: string, index: number) => (
-                                            <span key={index} className="px-2 py-1 bg-brand-accent/20 text-brand-accent rounded text-xs">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
+            {data.projects && data.projects.length > 0 ? (
+                <div className={`grid ${gridClasses} gap-8`}>
+                    {data.projects.map((project: any) => {
+                        // Support both new MediaRef structure and legacy imageUrl
+                        const imageUrl = project.image?.url || project.imageUrl;
+                        const imageAlt = project.image?.alt || project.title?.[locale] || 'Project image';
+                        
+                        return (
+                            <div key={project.id} className="bg-brand-night rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-brand-accent/20">
+                                {imageUrl && (
+                                    <img 
+                                        src={imageUrl} 
+                                        alt={imageAlt} 
+                                        className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" 
+                                    />
                                 )}
-                                {project.link && project.link !== '#' && (
-                                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-brand-accent font-semibold hover:underline">
-                                        View Project &rarr;
-                                    </a>
-                                )}
+                                <div className="p-6">
+                                    <h3 className="text-2xl font-bold mb-2">{project.title?.[locale]}</h3>
+                                    <p className="text-brand-mist mb-4">{project.description?.[locale]}</p>
+                                    {project.tags && project.tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-2 mb-4">
+                                            {project.tags.map((tag: string, index: number) => (
+                                                <span key={index} className="px-2 py-1 bg-brand-accent/20 text-brand-accent rounded text-xs">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {project.link && project.link !== '#' && (
+                                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-brand-accent font-semibold hover:underline">
+                                            View Project &rarr;
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <p className="text-center text-brand-mist">No projects added yet. Edit this section to add projects.</p>
+            )}
         </div>
     );
 };
@@ -167,16 +175,18 @@ const socialIconMap: Record<SocialPlatform, React.ReactNode> = {
 const ContactSection: React.FC<{ data: any; locale: Locale, effects: any; deviceView?: DeviceView }> = ({ data, locale, effects }) => (
     <div className={`py-24 px-6 text-center relative ${effects.blur ? 'bg-brand-night/50 backdrop-blur-md' : 'bg-brand-night'}`}>
         <h2 className="text-4xl font-bold mb-4">{data.title?.[locale]}</h2>
-        <a href={`mailto:${data.email}`} className="text-2xl text-brand-accent hover:underline inline-flex items-center gap-2">
-           <Mail size={24} /> {data.email}
+        <a href={`mailto:${data.email || 'contact@example.com'}`} className="text-2xl text-brand-accent hover:underline inline-flex items-center gap-2">
+           <Mail size={24} /> {data.email || 'contact@example.com'}
         </a>
-        <div className="flex justify-center gap-6 mt-8">
-            {data.socialLinks?.map((link: SocialLink) => (
-                <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="text-brand-mist hover:text-white transition-colors">
-                    {socialIconMap[link.platform] || null}
-                </a>
-            ))}
-        </div>
+        {data.socialLinks && data.socialLinks.length > 0 && (
+            <div className="flex justify-center gap-6 mt-8">
+                {data.socialLinks.map((link: SocialLink) => (
+                    <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="text-brand-mist hover:text-white transition-colors">
+                        {socialIconMap[link.platform] || null}
+                    </a>
+                ))}
+            </div>
+        )}
     </div>
 );
 

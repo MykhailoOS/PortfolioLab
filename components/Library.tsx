@@ -49,11 +49,7 @@ const createDefaultData = (type: SectionType) => {
         return { 
           title: createLocalizedString('Contact'), 
           email: 'your@email.com', 
-          socialLinks: {
-            github: '#',
-            linkedin: '#',
-            twitter: '#',
-          }
+          socialLinks: []
         };
       default: return {};
     }
