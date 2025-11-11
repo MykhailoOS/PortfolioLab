@@ -2,35 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Locale, Portfolio, DeviceView } from '../types';
 import { LOCALES } from '../constants';
-import { Smartphone, Tablet, Monitor, Download, Globe, Loader2, CheckCircle, AlertCircle, ArrowLeft, Eye } from 'lucide-react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { CanvasContent } from './CanvasContent';
+import { Smartphone, Tablet, Monitor, Download, Globe, Loader2, CheckCircle, AlertCircle, ArrowLeft, Eye, FileArchive } from 'lucide-react';
 import type { SaveStatus } from '../hooks/useAutosave';
-
-
-const generateHtml = (portfolio: Portfolio) => {
-  const bodyContent = renderToStaticMarkup(<CanvasContent sections={portfolio.sections} activeLocale={portfolio.defaultLocale} isExport={true} />);
-  
-  return `
-<!DOCTYPE html>
-<html lang="${portfolio.defaultLocale}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${portfolio.name}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: sans-serif; background-color: #111827; color: #f9fafb; }
-    /* Add more basic styles here to replicate tailwind config */
-    .section { padding: 4rem 1rem; }
-  </style>
-</head>
-<body>
-  ${bodyContent}
-</body>
-</html>
-  `;
-};
+import { exportPortfolioAsZip, downloadZip } from '../services/exportService';
+import type { ExportValidationError } from '../services/exportService';
+import { ExportReportModal } from './modals/ExportReportModal';
 
 
 export const TopBar: React.FC<{
@@ -51,6 +27,9 @@ export const TopBar: React.FC<{
   const [isExporting, setIsExporting] = useState(false);
   const [isLocaleMenuOpen, setIsLocaleMenuOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [showExportReport, setShowExportReport] = useState(false);
+  const [exportErrors, setExportErrors] = useState<ExportValidationError[] | undefined>();
+  const [exportStats, setExportStats] = useState<{ fileSize: number; pageCount: number; assetCount: number } | undefined>();
   const localeMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,22 +45,40 @@ export const TopBar: React.FC<{
   }, []);
 
 
-  const handleExport = () => {
+  const handleExport = async () => {
     setIsExporting(true);
+    setExportErrors(undefined);
+    setExportStats(undefined);
+    
     try {
-      const htmlContent = generateHtml(portfolio);
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${portfolio.name.toLowerCase().replace(/\s/g, '-')}-portfolio.html`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      // Check if there are unsaved changes
+      const hasUnsavedChanges = saveStatus === 'saving';
+      
+      // Run export with validation
+      const result = await exportPortfolioAsZip(portfolio, hasUnsavedChanges);
+      
+      if (result.success && result.blob && result.stats) {
+        // Success - download the file
+        downloadZip(result.blob, portfolio.name);
+        
+        // Show success report
+        setExportStats(result.stats);
+        setShowExportReport(true);
+      } else if (result.errors) {
+        // Validation errors - show report
+        setExportErrors(result.errors);
+        setShowExportReport(true);
+      }
     } catch (error) {
-      console.error("Export failed:", error);
-      alert("Export failed. Check the console for details.");
+      console.error('Export failed:', error);
+      setExportErrors([{
+        type: 'required_field',
+        sectionId: '',
+        sectionType: portfolio.sections[0]?.type || 'hero' as any,
+        field: '',
+        message: `Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }]);
+      setShowExportReport(true);
     } finally {
       setIsExporting(false);
     }
@@ -211,12 +208,31 @@ export const TopBar: React.FC<{
 
       <button
         onClick={handleExport}
-        disabled={isExporting}
-        className="flex items-center gap-2 bg-brand-accent text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500"
+        disabled={isExporting || saveStatus === 'saving'}
+        className="flex items-center gap-2 bg-brand-accent text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
+        title={saveStatus === 'saving' ? 'Waiting for autosave to complete...' : 'Export as .zip archive'}
       >
-        <Download size={18} />
-        <span className="hidden sm:inline">{isExporting ? 'Exporting...' : 'Export'}</span>
+        {isExporting ? (
+          <>
+            <Loader2 size={18} className="animate-spin" />
+            <span className="hidden sm:inline">Exporting...</span>
+          </>
+        ) : (
+          <>
+            <FileArchive size={18} />
+            <span className="hidden sm:inline">Export .zip</span>
+          </>
+        )}
       </button>
+      
+      {/* Export Report Modal */}
+      <ExportReportModal
+        isOpen={showExportReport}
+        onClose={() => setShowExportReport(false)}
+        errors={exportErrors}
+        stats={exportStats}
+        onRetry={handleExport}
+      />
     </header>
   );
 };
