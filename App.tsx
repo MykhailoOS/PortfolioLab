@@ -7,8 +7,9 @@ import { Library } from './components/Library';
 import { Canvas } from './components/Canvas';
 import { Inspector } from './components/Inspector';
 import { ConflictWarning } from './components/ConflictWarning';
+import { DeleteSectionModal } from './components/modals/DeleteSectionModal';
 import { Menu, X, Loader2, AlertCircle } from 'lucide-react';
-import { getProject, getBlocks, updateBlock, createBlock, reorderBlocks, createPage, getPages } from './services/supabaseApi';
+import { getProject, getBlocks, updateBlock, createBlock, reorderBlocks, createPage, getPages, deleteBlock } from './services/supabaseApi';
 import { useAutosave } from './hooks/useAutosave';
 
 type PortfolioAction =
@@ -65,6 +66,10 @@ export default function App() {
   const [isInspectorVisibleDesktop, setInspectorVisibleDesktop] = useState(true); // Desktop inspector
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop');
   const [justAddedSectionId, setJustAddedSectionId] = useState<string | null>(null);
+  
+  // Delete section state
+  const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // Project loading state
   const [isLoading, setIsLoading] = useState(true);
@@ -258,6 +263,53 @@ export default function App() {
     }
   }, [projectData, portfolio.sections.length]);
 
+  const handleDeleteSection = useCallback((sectionId: string) => {
+    // Prevent deletion if currently saving
+    if (saveStatus === 'saving') {
+      return;
+    }
+    setSectionToDelete(sectionId);
+  }, [saveStatus]);
+
+  const confirmDeleteSection = useCallback(async () => {
+    if (!sectionToDelete) return;
+    
+    const section = portfolio.sections.find(s => s.id === sectionToDelete);
+    if (!section) return;
+
+    setIsDeleting(true);
+    
+    try {
+      // If section has a Supabase block ID, delete it from database
+      if (section._strapiDocumentId) {
+        await deleteBlock(section._strapiDocumentId);
+      }
+      
+      // Remove from local state
+      dispatch({ type: 'REMOVE_SECTION', payload: { sectionId: sectionToDelete } });
+      
+      // Clear selection if deleted section was selected
+      if (selectedSectionId === sectionToDelete) {
+        setSelectedSectionId(null);
+        setInspectorOpen(false);
+      }
+      
+      // Close modal
+      setSectionToDelete(null);
+    } catch (error) {
+      console.error('Failed to delete section:', error);
+      alert('Failed to delete section. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [sectionToDelete, portfolio.sections, selectedSectionId, saveStatus]);
+
+  const cancelDeleteSection = useCallback(() => {
+    if (!isDeleting) {
+      setSectionToDelete(null);
+    }
+  }, [isDeleting]);
+
   const handleReorder = useCallback(async (startIndex: number, endIndex: number) => {
     // Reorder locally first
     dispatch({ type: 'REORDER_SECTIONS', payload: { startIndex, endIndex } });
@@ -422,6 +474,7 @@ export default function App() {
                 onUpdateMetadata={(sectionId, metadata) => {
                   dispatch({ type: 'UPDATE_SECTION_METADATA', payload: { sectionId, metadata } });
                 }}
+                onDelete={handleDeleteSection}
                 activeLocale={activeLocale}
                 onClose={() => setInspectorOpen(false)}
               />
@@ -430,6 +483,16 @@ export default function App() {
         {isInspectorOpen && <div onClick={()=>setInspectorOpen(false)} className="md:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in" />}
 
       </main>
+      
+      {/* Delete Section Modal */}
+      {sectionToDelete && (
+        <DeleteSectionModal
+          sectionType={portfolio.sections.find(s => s.id === sectionToDelete)?.type || 'section'}
+          isDeleting={isDeleting}
+          onConfirm={confirmDeleteSection}
+          onCancel={cancelDeleteSection}
+        />
+      )}
       
       {/* Conflict Warning Modal */}
       {showConflictWarning && (

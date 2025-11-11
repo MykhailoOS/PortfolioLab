@@ -61,9 +61,10 @@ export const Inspector: React.FC<{
   section: Section | undefined;
   onUpdate: (sectionId: string, data: any) => void;
   onUpdateMetadata?: (sectionId: string, metadata: Partial<Section>) => void;
+  onDelete?: (sectionId: string) => void;
   activeLocale: Locale;
   onClose: () => void;
-}> = ({ section, onUpdate, onUpdateMetadata, activeLocale, onClose }) => {
+}> = ({ section, onUpdate, onUpdateMetadata, onDelete, activeLocale, onClose }) => {
   if (!section) {
     return (
       <div className="w-full h-full bg-brand-dark p-4 flex flex-col text-brand-mist">
@@ -313,7 +314,20 @@ export const Inspector: React.FC<{
     <div className="w-full h-full bg-brand-dark md:border-l md:border-gray-700 p-4 flex flex-col">
       <div className="flex justify-between items-center mb-4 flex-shrink-0">
         <h2 className="text-xl font-bold">{section.type.charAt(0).toUpperCase() + section.type.slice(1)} Section</h2>
-        <button onClick={onClose} className="md:hidden text-brand-mist hover:text-white"><X size={24} /></button>
+        <div className="flex items-center gap-2">
+          {onDelete && (
+            <button 
+              onClick={() => onDelete(section.id)} 
+              className="text-red-500 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded"
+              title="Delete section"
+            >
+              <Trash2 size={20} />
+            </button>
+          )}
+          <button onClick={onClose} className="md:hidden text-brand-mist hover:text-white">
+            <X size={24} />
+          </button>
+        </div>
       </div>
       <div className="flex-grow overflow-y-auto">
         {renderFields()}
