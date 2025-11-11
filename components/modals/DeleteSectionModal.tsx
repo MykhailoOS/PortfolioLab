@@ -16,7 +16,7 @@ export const DeleteSectionModal: React.FC<DeleteSectionModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 animate-fade-in">
-      <div className="bg-brand-dark border border-gray-700 rounded-lg shadow-2xl max-w-md w-full mx-4">
+      <div className="relative z-[10001] bg-brand-dark border border-gray-700 rounded-lg shadow-2xl max-w-md w-full mx-4">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-700">
           <div className="flex items-center gap-3">
