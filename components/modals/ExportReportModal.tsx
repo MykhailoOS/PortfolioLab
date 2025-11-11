@@ -63,7 +63,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
   const isSuccess = !hasErrors && stats;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 animate-fade-in">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 animate-fade-in">
       <div className="bg-brand-dark border border-gray-700 rounded-lg shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-700 flex-shrink-0">
