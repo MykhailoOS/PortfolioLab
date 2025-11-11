@@ -177,9 +177,10 @@ export const TopBar: React.FC<{
         </div>
       </div>
 
-      {/* Device Preview */}
-      <div className="hidden md:flex items-center gap-2">
-        <div className="flex items-center gap-2 p-1 bg-brand-night rounded-lg">
+      {/* Device Preview & Preview Toggle */}
+      <div className="flex items-center gap-2">
+        {/* Device switches - hidden on mobile */}
+        <div className="hidden md:flex items-center gap-2 p-1 bg-brand-night rounded-lg">
           <button onClick={() => setDeviceView('desktop')} className={getButtonClass('desktop')} aria-label="Desktop view">
               <Monitor size={20} />
           </button>
@@ -191,11 +192,11 @@ export const TopBar: React.FC<{
           </button>
         </div>
         
-        {/* Preview Toggle Button */}
+        {/* Preview Toggle Button - visible on all devices */}
         {onTogglePreview && (
           <button
             onClick={onTogglePreview}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg font-semibold transition-colors ${
               isPreviewMode
                 ? 'bg-brand-accent text-white'
                 : 'bg-brand-night text-brand-mist hover:text-white hover:bg-gray-700'
@@ -203,7 +204,7 @@ export const TopBar: React.FC<{
             aria-label={isPreviewMode ? 'Exit Preview Mode' : 'Enter Preview Mode'}
           >
             <Eye size={18} />
-            <span>{isPreviewMode ? 'Edit' : 'Preview'}</span>
+            <span className="hidden sm:inline">{isPreviewMode ? 'Edit' : 'Preview'}</span>
           </button>
         )}
       </div>
@@ -211,10 +212,10 @@ export const TopBar: React.FC<{
       <button
         onClick={handleExport}
         disabled={isExporting}
-        className="flex items-center gap-2 bg-brand-accent text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500"
+        className="flex items-center gap-2 bg-brand-accent text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500"
       >
         <Download size={18} />
-        <span>{isExporting ? 'Exporting...' : 'Export'}</span>
+        <span className="hidden sm:inline">{isExporting ? 'Exporting...' : 'Export'}</span>
       </button>
     </header>
   );
