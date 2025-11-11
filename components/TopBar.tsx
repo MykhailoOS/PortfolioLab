@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Locale, Portfolio, DeviceView } from '../types';
 import { LOCALES } from '../constants';
-import { Smartphone, Tablet, Monitor, Download, Globe, Loader2, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Smartphone, Tablet, Monitor, Download, Globe, Loader2, CheckCircle, AlertCircle, ArrowLeft, Eye } from 'lucide-react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { CanvasContent } from './CanvasContent';
 import type { SaveStatus } from '../hooks/useAutosave';
@@ -44,7 +44,9 @@ export const TopBar: React.FC<{
   saveStatus?: SaveStatus;
   saveError?: string | null;
   onBackToDashboard?: () => Promise<void>;
-}> = ({ projectName, activeLocale, setActiveLocale, enabledLocales, portfolio, deviceView, setDeviceView, saveStatus = 'idle', saveError = null, onBackToDashboard }) => {
+  isPreviewMode?: boolean;
+  onTogglePreview?: () => void;
+}> = ({ projectName, activeLocale, setActiveLocale, enabledLocales, portfolio, deviceView, setDeviceView, saveStatus = 'idle', saveError = null, onBackToDashboard, isPreviewMode = false, onTogglePreview }) => {
   const navigate = useNavigate();
   const [isExporting, setIsExporting] = useState(false);
   const [isLocaleMenuOpen, setIsLocaleMenuOpen] = useState(false);
@@ -176,16 +178,34 @@ export const TopBar: React.FC<{
       </div>
 
       {/* Device Preview */}
-      <div className="hidden md:flex items-center gap-2 p-1 bg-brand-night rounded-lg">
-        <button onClick={() => setDeviceView('desktop')} className={getButtonClass('desktop')} aria-label="Desktop view">
-            <Monitor size={20} />
-        </button>
-        <button onClick={() => setDeviceView('tablet')} className={getButtonClass('tablet')} aria-label="Tablet view">
-            <Tablet size={20} />
-        </button>
-        <button onClick={() => setDeviceView('mobile')} className={getButtonClass('mobile')} aria-label="Mobile view">
-            <Smartphone size={20} />
-        </button>
+      <div className="hidden md:flex items-center gap-2">
+        <div className="flex items-center gap-2 p-1 bg-brand-night rounded-lg">
+          <button onClick={() => setDeviceView('desktop')} className={getButtonClass('desktop')} aria-label="Desktop view">
+              <Monitor size={20} />
+          </button>
+          <button onClick={() => setDeviceView('tablet')} className={getButtonClass('tablet')} aria-label="Tablet view">
+              <Tablet size={20} />
+          </button>
+          <button onClick={() => setDeviceView('mobile')} className={getButtonClass('mobile')} aria-label="Mobile view">
+              <Smartphone size={20} />
+          </button>
+        </div>
+        
+        {/* Preview Toggle Button */}
+        {onTogglePreview && (
+          <button
+            onClick={onTogglePreview}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+              isPreviewMode
+                ? 'bg-brand-accent text-white'
+                : 'bg-brand-night text-brand-mist hover:text-white hover:bg-gray-700'
+            }`}
+            aria-label={isPreviewMode ? 'Exit Preview Mode' : 'Enter Preview Mode'}
+          >
+            <Eye size={18} />
+            <span>{isPreviewMode ? 'Edit' : 'Preview'}</span>
+          </button>
+        )}
       </div>
 
       <button

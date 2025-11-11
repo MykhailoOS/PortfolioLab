@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useCallback, useMemo, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import type { Portfolio, Section, Locale, DeviceView } from './types';
 import { INITIAL_PORTFOLIO_DATA } from './constants';
 import { TopBar } from './components/TopBar';
@@ -8,6 +8,10 @@ import { Canvas } from './components/Canvas';
 import { Inspector } from './components/Inspector';
 import { ConflictWarning } from './components/ConflictWarning';
 import { DeleteSectionModal } from './components/modals/DeleteSectionModal';
+import { PreviewToolbar } from './components/PreviewToolbar';
+import { PreviewFrame } from './components/PreviewFrame';
+import { Watermark } from './components/Watermark';
+import { CanvasContent } from './components/CanvasContent';
 import { Menu, X, Loader2, AlertCircle } from 'lucide-react';
 import { getProject, getBlocks, updateBlock, createBlock, reorderBlocks, createPage, getPages, deleteBlock } from './services/supabaseApi';
 import { useAutosave } from './hooks/useAutosave';
@@ -56,6 +60,7 @@ function portfolioReducer(state: Portfolio, action: PortfolioAction): Portfolio 
 export default function App() {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   
   const [portfolio, dispatch] = useReducer(portfolioReducer, INITIAL_PORTFOLIO_DATA);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
@@ -66,6 +71,10 @@ export default function App() {
   const [isInspectorVisibleDesktop, setInspectorVisibleDesktop] = useState(true); // Desktop inspector
   const [deviceView, setDeviceView] = useState<DeviceView>('desktop');
   const [justAddedSectionId, setJustAddedSectionId] = useState<string | null>(null);
+  
+  // Preview mode state
+  const isPreviewMode = searchParams.get('mode') === 'preview';
+  const [isPreviewRotated, setIsPreviewRotated] = useState(false);
   
   // Delete section state
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
@@ -149,6 +158,54 @@ export default function App() {
     }
 
     loadProject();
+  }, [projectId]);
+
+  // Toggle preview mode
+  const togglePreviewMode = useCallback(() => {
+    if (isPreviewMode) {
+      searchParams.delete('mode');
+    } else {
+      searchParams.set('mode', 'preview');
+      // Remember device view in localStorage
+      localStorage.setItem(`preview-device-${projectId}`, deviceView);
+    }
+    setSearchParams(searchParams);
+  }, [isPreviewMode, searchParams, setSearchParams, deviceView, projectId]);
+
+  // Exit preview mode on Esc
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isPreviewMode) {
+        togglePreviewMode();
+      }
+    };
+
+    if (isPreviewMode) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isPreviewMode, togglePreviewMode]);
+
+  // Load preview device from localStorage
+  useEffect(() => {
+    if (isPreviewMode && projectId) {
+      const savedDevice = localStorage.getItem(`preview-device-${projectId}`) as DeviceView;
+      if (savedDevice && ['desktop', 'tablet', 'mobile'].includes(savedDevice)) {
+        setDeviceView(savedDevice);
+      }
+    }
+  }, [isPreviewMode, projectId]);
+
+  // Handle preview device change
+  const handlePreviewDeviceChange = useCallback((device: DeviceView) => {
+    setDeviceView(device);
+    if (projectId) {
+      localStorage.setItem(`preview-device-${projectId}`, device);
+    }
+    // Reset rotation when changing device
+    if (device === 'desktop') {
+      setIsPreviewRotated(false);
+    }
   }, [projectId]);
 
   // Autosave sections to Supabase
@@ -403,19 +460,48 @@ export default function App() {
 
   return (
     <div className="bg-brand-dark text-brand-light font-sans min-h-screen flex flex-col">
-      <TopBar 
-        projectName={projectData?.name || portfolio.name} 
-        activeLocale={activeLocale} 
-        setActiveLocale={setActiveLocale} 
-        enabledLocales={projectData?.enabledLocales || portfolio.enabledLocales} 
-        portfolio={portfolio}
-        deviceView={deviceView}
-        setDeviceView={setDeviceView}
-        saveStatus={saveStatus}
-        saveError={saveError}
-        onBackToDashboard={flush}
-      />
-      <main className="flex-grow flex w-full h-[calc(100vh-4rem)] overflow-x-hidden">
+      {/* Show different header for preview vs edit mode */}
+      {isPreviewMode ? (
+        <PreviewToolbar
+          deviceView={deviceView}
+          onDeviceChange={handlePreviewDeviceChange}
+          isRotated={isPreviewRotated}
+          onRotateToggle={() => setIsPreviewRotated(!isPreviewRotated)}
+          onExit={togglePreviewMode}
+        />
+      ) : (
+        <TopBar 
+          projectName={projectData?.name || portfolio.name} 
+          activeLocale={activeLocale} 
+          setActiveLocale={setActiveLocale} 
+          enabledLocales={projectData?.enabledLocales || portfolio.enabledLocales} 
+          portfolio={portfolio}
+          deviceView={deviceView}
+          setDeviceView={setDeviceView}
+          saveStatus={saveStatus}
+          saveError={saveError}
+          onBackToDashboard={flush}
+          isPreviewMode={isPreviewMode}
+          onTogglePreview={togglePreviewMode}
+        />
+      )}
+      
+      {/* Preview Mode */}
+      {isPreviewMode ? (
+        <>
+          <PreviewFrame deviceView={deviceView} isRotated={isPreviewRotated}>
+            <CanvasContent 
+              sections={portfolio.sections}
+              activeLocale={activeLocale}
+              isExport={true}
+              deviceView={deviceView}
+            />
+          </PreviewFrame>
+          <Watermark />
+        </>
+      ) : (
+        /* Edit Mode */
+        <main className="flex-grow flex w-full h-[calc(100vh-4rem)] overflow-x-hidden">
         {/* Mobile FABs */}
         <div className="md:hidden fixed bottom-4 left-4 z-40">
            <button onClick={() => setLibraryOpen(true)} className="bg-brand-accent text-white p-4 rounded-full shadow-lg">
@@ -482,7 +568,8 @@ export default function App() {
         </div>
         {isInspectorOpen && <div onClick={()=>setInspectorOpen(false)} className="md:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in" />}
 
-      </main>
+        </main>
+      )}
       
       {/* Delete Section Modal */}
       {sectionToDelete && (
