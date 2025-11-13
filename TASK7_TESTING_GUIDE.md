@@ -75,7 +75,7 @@ unzip your-portfolio-name.zip
 
 # Check structure
 ls -la
-# Should see: assets/, en/, uk/, ru/, pl/, README.txt
+# Should see: assets/, en/, uk/, pl/, README.txt
 
 # Check assets
 ls assets/css/  # style.css
@@ -148,7 +148,7 @@ open http://localhost:8000/en/index.html
 
 1. Check each locale folder has `index.html`
 2. Open `uk/index.html` → Content in Ukrainian
-3. Open `ru/index.html` → Content in Russian
+3. Open `pl/index.html` → Content in Polish
 4. Open `pl/index.html` → Content in Polish
 5. Verify all sections show translated content
 

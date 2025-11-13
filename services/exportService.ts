@@ -1191,7 +1191,6 @@ function generateHTML(portfolio: Portfolio, locale: Locale, assetMap: AssetMap):
   const localeNames: Record<Locale, string> = {
     en: 'English',
     ua: 'Українська',
-    ru: 'Русский',
     pl: 'Polski'
   };
   
@@ -1344,6 +1343,104 @@ For support or questions, visit our documentation.
 
 © ${new Date().getFullYear()} - Made with PortfolioLab Free
 `;
+}
+
+// ============================================================================
+// FILE MAP GENERATION (FOR GITHUB PUSH)
+// ============================================================================
+
+/**
+ * Generate file map for GitHub push (instead of ZIP)
+ * Returns array of {path, content} objects
+ */
+export async function generateFileMapForGitHub(
+  portfolio: Portfolio,
+  hasUnsavedChanges: boolean
+): Promise<{ success: boolean; files?: Array<{path: string, content: string}>; errors?: ExportValidationError[] }> {
+  try {
+    // Step 1: Validate
+    const errors = await validateExport(portfolio, hasUnsavedChanges);
+    if (errors.length > 0) {
+      return { success: false, errors };
+    }
+    
+    // Step 2: Collect assets
+    const { assetMap, blobs } = await collectAssets(portfolio);
+    
+    // Step 3: Generate files
+    const css = generateCSS(portfolio);
+    const js = generateJS();
+    const readme = generateReadme(portfolio);
+    
+    // Step 4: Create file array
+    const files: Array<{path: string, content: string}> = [];
+    
+    // Add CSS
+    files.push({
+      path: 'assets/css/style.css',
+      content: css
+    });
+    
+    // Add JS
+    files.push({
+      path: 'assets/js/main.js',
+      content: js
+    });
+    
+    // Add images (convert blobs to base64 data URLs for text representation)
+    for (const [path, blob] of blobs) {
+      // Read blob as base64
+      const reader = new FileReader();
+      const base64 = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => {
+          const result = reader.result as string;
+          // Extract base64 part (remove data:image/...;base64, prefix)
+          const base64Data = result.split(',')[1];
+          resolve(base64Data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      
+      files.push({
+        path,
+        content: base64 // Base64-encoded image
+      });
+    }
+    
+    // Add HTML pages for each locale
+    portfolio.enabledLocales.forEach(locale => {
+      const html = generateHTML(portfolio, locale, assetMap);
+      files.push({
+        path: `${locale}/index.html`,
+        content: html
+      });
+    });
+    
+    // Add README
+    files.push({
+      path: 'README.txt',
+      content: readme
+    });
+    
+    return {
+      success: true,
+      files
+    };
+    
+  } catch (error) {
+    console.error('File map generation failed:', error);
+    return {
+      success: false,
+      errors: [{
+        type: 'required_field',
+        sectionId: '',
+        sectionType: SectionType.Hero,
+        field: '',
+        message: `File map generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }]
+    };
+  }
 }
 
 // ============================================================================

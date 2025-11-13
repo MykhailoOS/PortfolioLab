@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="PortfolioLab Dashboard" src="./dashboard.png" />
 </div>
 
 # Portfolio Maker Pro - 3D Portfolio Constructor
@@ -14,6 +14,7 @@ A modern, feature-rich portfolio builder with **Strapi backend integration** for
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** (v18 or higher)
 - **npm** or **yarn**
 
@@ -55,6 +56,7 @@ Open [http://localhost:3000](http://localhost:3000)
 To save and load projects, you need to set up Strapi:
 
 **Option A: Use Strapi Cloud (Easiest)**
+
 1. Sign up at https://cloud.strapi.io (free tier available)
 2. Create a new project
 3. Follow **[STRAPI_COLLECTIONS.md](./STRAPI_COLLECTIONS.md)** to set up collections
@@ -66,6 +68,7 @@ To save and load projects, you need to set up Strapi:
    ```
 
 **Option B: Install Strapi Locally (No Docker Required!)**
+
 ```bash
 # In a separate directory
 npx create-strapi-app@latest portfolio-backend --quickstart
@@ -80,14 +83,17 @@ Then follow **[STRAPI_COLLECTIONS.md](./STRAPI_COLLECTIONS.md)** for detailed se
 ## 📚 Documentation
 
 ### Setup Guides
+
 - **[STRAPI_COLLECTIONS.md](./STRAPI_COLLECTIONS.md)** - Complete Strapi backend setup guide
 - **[STRAPI_SETUP.md](./STRAPI_SETUP.md)** - Legacy Strapi/Directus image upload guide
 
 ### Implementation Details
+
 - **[TASK2_COMPLETE.md](./TASK2_COMPLETE.md)** - Task 2 implementation (Dashboard & Project Management)
 - **[TASK1_IMPLEMENTATION.md](./TASK1_IMPLEMENTATION.md)** - Task 1 implementation (Image Upload)
 
 ### Task Requirements
+
 - **[task2.md](./task2.md)** - Task 2 original requirements
 - **[task1.md](./task1.md)** - Task 1 original requirements
 
@@ -120,7 +126,7 @@ Then follow **[STRAPI_COLLECTIONS.md](./STRAPI_COLLECTIONS.md)** for detailed se
 
 ### Core Features
 
-- **Multilingual Support**: English, Ukrainian, Russian, Polish (4 locales)
+- **Multilingual Support**: English, Ukrainian, Polish (3 locales)
 - **Device Preview**: Desktop, tablet, mobile views
 - **Drag & Drop**: Reorder sections on canvas
 - **3D Effects**: Optional Three.js integration for Hero section
@@ -190,6 +196,7 @@ Adding a new field is easy - edit the schema, and it appears automatically!
 Example: Add a subtitle to About section:
 
 1. Edit `schemas/blockSchemas.ts`:
+
 ```typescript
 {
   name: 'subtitle',
@@ -200,6 +207,7 @@ Example: Add a subtitle to About section:
 ```
 
 2. Update `types.ts`:
+
 ```typescript
 export type AboutSectionData = {
   // ... existing
@@ -226,6 +234,7 @@ export type AboutSectionData = {
 ⚠️ **Current setup uses a static token for demo purposes.**
 
 For production:
+
 - Implement proper authentication
 - Use server-side token validation
 - Configure CORS to specific domains
@@ -259,6 +268,7 @@ npm run preview  # Preview production build
 See **[TASK1_IMPLEMENTATION.md](./TASK1_IMPLEMENTATION.md)** for complete test checklist.
 
 Quick tests:
+
 - ✅ Upload avatar in About section
 - ✅ Upload project thumbnails
 - ✅ Try uploading >5 MB file (should error)
@@ -271,14 +281,17 @@ Quick tests:
 ## 🐛 Troubleshooting
 
 ### "Upload failed: 401 Unauthorized"
+
 - Check `.env` has correct Directus token
 - Verify token permissions in Directus
 
 ### "CORS error"
+
 - Check `docker-compose.yml` has `CORS_ORIGIN: 'http://localhost:3000'`
 - Restart Directus: `docker-compose restart`
 
 ### Images not loading
+
 - Verify Directus is running: `docker-compose ps`
 - Check Network tab for 404 errors
 - Test URL: `http://localhost:8055/assets/[file-id]`
@@ -305,6 +318,7 @@ See **[DIRECTUS_SETUP.md](./DIRECTUS_SETUP.md)** → Troubleshooting for more.
 Tasks 1 and 2 are complete! Future enhancements may include:
 
 ### Short-term:
+
 - Section deletion with Strapi sync
 - Multi-page support in editor
 - Project duplication
@@ -312,6 +326,7 @@ Tasks 1 and 2 are complete! Future enhancements may include:
 - Bulk operations
 
 ### Medium-term:
+
 - Version conflict detection
 - Real-time collaboration (WebSockets)
 - Project templates
@@ -319,6 +334,7 @@ Tasks 1 and 2 are complete! Future enhancements may include:
 - Analytics dashboard
 
 ### Long-term:
+
 - Team collaboration
 - Custom domains for published portfolios
 - A/B testing
@@ -342,5 +358,6 @@ MIT
 ---
 
 For detailed implementation information, see:
+
 - [TASK2_COMPLETE.md](./TASK2_COMPLETE.md) - Dashboard implementation
 - [TASK1_IMPLEMENTATION.md](./TASK1_IMPLEMENTATION.md) - Image upload implementation

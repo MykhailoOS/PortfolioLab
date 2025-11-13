@@ -14,12 +14,13 @@ const sectionTemplates: { name: string; type: SectionType, icon: React.ReactNode
 ];
 
 // A helper to create a fully populated LocalizedString
-const createLocalizedString = (text: string): LocalizedString => ({
-  en: text,
-  ua: text,
-  ru: text,
-  pl: text,
-});
+function createLocalizedString(text: string): LocalizedString {
+  return {
+    en: text,
+    ua: text,
+    pl: text,
+  };
+}
 
 const createDefaultData = (type: SectionType) => {
     switch(type) {

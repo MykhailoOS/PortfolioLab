@@ -1,6 +1,7 @@
 # Quick Strapi Setup Checklist
 
 ## ✅ Step 1: Installation (In Progress)
+
 Strapi is currently installing in `~/Downloads/portfolio-backend`
 ⏳ Expected time: 2-3 minutes
 
@@ -9,10 +10,11 @@ Strapi is currently installing in `~/Downloads/portfolio-backend`
 ## 📝 Step 2: Create Admin Account (After Installation)
 
 When installation completes:
+
 1. Browser will auto-open to `http://localhost:1337/admin`
 2. Fill in the registration form:
    - **First name:** Your name
-   - **Last name:** Your last name  
+   - **Last name:** Your last name
    - **Email:** your@email.com
    - **Password:** Choose a password (8+ characters)
 3. Click **"Let's start"**
@@ -30,34 +32,40 @@ When installation completes:
 5. Add these fields one by one:
 
 **Field 1: name**
+
 - Type: **Text**
 - Name: `name`
 - Click **Add another field**
 
 **Field 2: slug**
+
 - Type: **UID**
 - Name: `slug`
 - Attached field: `name`
 - Click **Add another field**
 
 **Field 3: defaultLocale**
+
 - Type: **Enumeration**
 - Name: `defaultLocale`
-- Values: `en`, `ua`, `ru`, `pl` (add one by one)
+- Values: `en`, `ua`, `pl` (add one by one)
 - Default value: `en`
 - Click **Add another field**
 
 **Field 4: enabledLocales**
+
 - Type: **JSON**
 - Name: `enabledLocales`
 - Click **Add another field**
 
 **Field 5: theme**
+
 - Type: **JSON**
 - Name: `theme`
 - Click **Add another field**
 
 **Field 6: status**
+
 - Type: **Enumeration**
 - Name: `status`
 - Values: `active`, `archived`
@@ -76,17 +84,20 @@ When installation completes:
 4. Add fields:
 
 **Field 1: path**
+
 - Type: **Text**
 - Name: `path`
 - Default value: `/`
 
 **Field 2: order**
+
 - Type: **Number**
 - Name: `order`
 - Number format: **integer**
 - Default value: `0`
 
 **Field 3: seo**
+
 - Type: **JSON**
 - Name: `seo`
 
@@ -103,25 +114,30 @@ When installation completes:
 4. Add fields:
 
 **Field 1: type**
+
 - Type: **Enumeration**
 - Name: `type`
 - Values: `hero`, `about`, `skills`, `projects`, `contact`
 
 **Field 2: order**
+
 - Type: **Number**
 - Name: `order`
 - Number format: **integer**
 - Default value: `0`
 
 **Field 3: data**
+
 - Type: **JSON**
 - Name: `data`
 
 **Field 4: style**
+
 - Type: **JSON**
 - Name: `style`
 
 **Field 5: effects**
+
 - Type: **JSON**
 - Name: `effects`
 
@@ -133,6 +149,7 @@ When installation completes:
 ### D. Add Relations
 
 **Page → Project Relation:**
+
 1. Click on **Page** collection in Content-Type Builder
 2. Click **"Add another field"**
 3. Select **Relation**
@@ -143,6 +160,7 @@ When installation completes:
 6. Click **Save**
 
 **Block → Page Relation:**
+
 1. Click on **Block** collection
 2. Click **"Add another field"**
 3. Select **Relation**
@@ -200,6 +218,7 @@ When installation completes:
 ## 🎉 You're Done!
 
 Your full stack is now running:
+
 - **Frontend:** http://localhost:3000 (Portfolio Maker Pro)
 - **Backend:** http://localhost:1337 (Strapi Admin)
 

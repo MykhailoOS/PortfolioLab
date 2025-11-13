@@ -194,8 +194,8 @@ export const Inspector: React.FC<{
             const addProject = () => {
                 const newProject = { 
                     id: `p-${Date.now()}`, 
-                    title: { en: 'New Project', ua: 'Новий проект', ru: 'Новый проект', pl: 'Nowy projekt' }, 
-                    description: { en: 'A brief description.', ua: 'Короткий опис.', ru: 'Краткое описание.', pl: 'Krótki opis.' }, 
+                    title: { en: 'New Project', ua: 'Новий проект', pl: 'Nowy projekt' }, 
+                    description: { en: 'A brief description.', ua: 'Короткий опис.', pl: 'Krótki opis.' }, 
                     tags: [],
                     link: '#' 
                 };

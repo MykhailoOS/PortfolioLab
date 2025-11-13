@@ -23,7 +23,7 @@ export const SchemaField: React.FC<SchemaFieldProps> = ({
 
   // Localized Text Input
   if (type === 'localized-text' || type === 'localized-textarea') {
-    const localizedValue = value as LocalizedString || { en: '', ua: '', ru: '', pl: '' };
+    const localizedValue = value as LocalizedString || { en: '', ua: '', pl: '' };
     
     const handleLocalizedChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       onChange({ ...localizedValue, [activeLocale]: e.target.value });

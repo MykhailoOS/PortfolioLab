@@ -6,7 +6,7 @@ export enum SectionType {
   Contact = 'contact',
 }
 
-export type Locale = 'en' | 'ua' | 'ru' | 'pl';
+export type Locale = 'en' | 'ua' | 'pl';
 
 export type DeviceView = 'desktop' | 'tablet' | 'mobile';
 
@@ -26,7 +26,6 @@ export interface MediaRef {
 export interface LocalizedString {
   en: string;
   ua: string;
-  ru: string;
   pl: string;
 }
 

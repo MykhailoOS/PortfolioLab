@@ -31,19 +31,21 @@ On first launch, Strapi will open the admin panel registration page. Create your
 
 **Fields:**
 
-| Field Name | Type | Settings |
-|------------|------|----------|
-| `name` | Text | Required, Max length: 255 |
-| `slug` | UID | Required, Attached to: `name`, Unique |
-| `defaultLocale` | Enumeration | Required, Values: `en`, `ua`, `ru`, `pl`, Default: `en` |
-| `enabledLocales` | JSON | Required, Default: `["en"]` |
-| `theme` | JSON | Optional, Default: `{"primaryColor": "#7c3aed", "mode": "dark"}` |
-| `status` | Enumeration | Required, Values: `active`, `archived`, Default: `active` |
+| Field Name       | Type        | Settings                                                         |
+| ---------------- | ----------- | ---------------------------------------------------------------- |
+| `name`           | Text        | Required, Max length: 255                                        |
+| `slug`           | UID         | Required, Attached to: `name`, Unique                            |
+| `defaultLocale`  | Enumeration | Required, Values: `en`, `ua`, `pl`, Default: `en`                |
+| `enabledLocales` | JSON        | Required, Default: `["en"]`                                      |
+| `theme`          | JSON        | Optional, Default: `{"primaryColor": "#7c3aed", "mode": "dark"}` |
+| `status`         | Enumeration | Required, Values: `active`, `archived`, Default: `active`        |
 
 **Relations:**
+
 - Has many `pages` (one-to-many)
 
 **Steps to create:**
+
 1. Go to Content-Type Builder in admin panel
 2. Click "Create new collection type"
 3. Enter Display name: `Project`, API ID (singular): `project`
@@ -58,17 +60,19 @@ On first launch, Strapi will open the admin panel registration page. Create your
 
 **Fields:**
 
-| Field Name | Type | Settings |
-|------------|------|----------|
-| `path` | Text | Required, Default: `/`, Max length: 255 |
-| `order` | Number | Required, Integer, Default: 0 |
-| `seo` | JSON | Optional, Default: `{}` |
+| Field Name | Type   | Settings                                |
+| ---------- | ------ | --------------------------------------- |
+| `path`     | Text   | Required, Default: `/`, Max length: 255 |
+| `order`    | Number | Required, Integer, Default: 0           |
+| `seo`      | JSON   | Optional, Default: `{}`                 |
 
 **Relations:**
+
 - Belongs to `project` (many-to-one)
 - Has many `blocks` (one-to-many)
 
 **Steps to create:**
+
 1. Go to Content-Type Builder
 2. Click "Create new collection type"
 3. Enter Display name: `Page`, API ID (singular): `page`
@@ -88,18 +92,20 @@ On first launch, Strapi will open the admin panel registration page. Create your
 
 **Fields:**
 
-| Field Name | Type | Settings |
-|------------|------|----------|
-| `type` | Enumeration | Required, Values: `hero`, `about`, `skills`, `projects`, `contact` |
-| `order` | Number | Required, Integer, Default: 0 |
-| `data` | JSON | Required, Default: `{}` |
-| `style` | JSON | Optional, Default: `{}` |
-| `effects` | JSON | Optional, Default: `{"parallax": 0, "blur": false, "has3d": false}` |
+| Field Name | Type        | Settings                                                            |
+| ---------- | ----------- | ------------------------------------------------------------------- |
+| `type`     | Enumeration | Required, Values: `hero`, `about`, `skills`, `projects`, `contact`  |
+| `order`    | Number      | Required, Integer, Default: 0                                       |
+| `data`     | JSON        | Required, Default: `{}`                                             |
+| `style`    | JSON        | Optional, Default: `{}`                                             |
+| `effects`  | JSON        | Optional, Default: `{"parallax": 0, "blur": false, "has3d": false}` |
 
 **Relations:**
+
 - Belongs to `page` (many-to-one)
 
 **Steps to create:**
+
 1. Go to Content-Type Builder
 2. Click "Create new collection type"
 3. Enter Display name: `Block`, API ID (singular): `block`
@@ -122,6 +128,7 @@ On first launch, Strapi will open the admin panel registration page. Create your
 3. Under **Permissions**, expand each collection type and enable:
 
 **Project:**
+
 - `find` (GET /api/projects)
 - `findOne` (GET /api/projects/:id)
 - `create` (POST /api/projects)
@@ -129,9 +136,11 @@ On first launch, Strapi will open the admin panel registration page. Create your
 - `delete` (DELETE /api/projects/:id)
 
 **Page:**
+
 - `find`, `findOne`, `create`, `update`, `delete`
 
 **Block:**
+
 - `find`, `findOne`, `create`, `update`, `delete`
 
 4. Click **Save**
@@ -213,12 +222,24 @@ For public access (development only), you can leave `VITE_STRAPI_TOKEN` empty if
    - **type:** hero
    - **order:** 0
    - **page:** Select the page you just created
-   - **data:** 
+   - **data:**
      ```json
      {
-       "headline": {"en": "Hello World", "ua": "Привіт світ", "ru": "Привет мир", "pl": "Witaj świecie"},
-       "subheadline": {"en": "Welcome to my portfolio", "ua": "Ласкаво просимо", "ru": "Добро пожаловать", "pl": "Witamy"},
-       "ctaButton": {"en": "View Projects", "ua": "Переглянути проекти", "ru": "Посмотреть проекты", "pl": "Zobacz projekty"}
+       "headline": {
+         "en": "Hello World",
+         "ua": "Привіт світ",
+         "pl": "Witaj świecie"
+       },
+       "subheadline": {
+         "en": "Welcome to my portfolio",
+         "ua": "Ласкаво просимо",
+         "pl": "Witamy"
+       },
+       "ctaButton": {
+         "en": "View Projects",
+         "ua": "Переглянути проекти",
+         "pl": "Zobacz projekty"
+       }
      }
      ```
    - **effects:** `{"parallax": 0, "blur": false, "has3d": false}`
@@ -260,6 +281,7 @@ The Portfolio Maker Pro also supports image uploads. Strapi's upload plugin is e
 **Permissions for Upload:**
 
 Go to **Settings** → **Users & Permissions Plugin** → **Roles** → **Public** (or **Authenticated**)
+
 - Under **Upload**, enable:
   - `upload` (POST /api/upload)
 
@@ -301,11 +323,14 @@ Here's how the data is structured when fetched:
             "type": "hero",
             "order": 0,
             "data": {
-              "headline": {"en": "Hello World", "ua": "Привіт світ"},
-              "subheadline": {"en": "Welcome", "ua": "Ласкаво просимо"},
-              "ctaButton": {"en": "View Projects", "ua": "Переглянути проекти"}
+              "headline": { "en": "Hello World", "ua": "Привіт світ" },
+              "subheadline": { "en": "Welcome", "ua": "Ласкаво просимо" },
+              "ctaButton": {
+                "en": "View Projects",
+                "ua": "Переглянути проекти"
+              }
             },
-            "effects": {"parallax": 0, "blur": false, "has3d": false},
+            "effects": { "parallax": 0, "blur": false, "has3d": false },
             "createdAt": "2025-11-02T10:00:00.000Z",
             "updatedAt": "2025-11-02T10:00:00.000Z"
           }
@@ -331,10 +356,10 @@ If you get CORS errors when accessing from your frontend:
 module.exports = [
   // ... other middlewares
   {
-    name: 'strapi::cors',
+    name: "strapi::cors",
     config: {
       enabled: true,
-      origin: ['http://localhost:3000', 'http://localhost:5173'], // Add your frontend URLs
+      origin: ["http://localhost:3000", "http://localhost:5173"], // Add your frontend URLs
       credentials: true,
     },
   },
@@ -365,6 +390,7 @@ This tells Strapi to include nested relations (pages with their blocks).
 ### Strapi Backend
 
 You can deploy Strapi to:
+
 - **Strapi Cloud** (official hosting, easiest)
 - **Heroku**
 - **AWS/DigitalOcean/Railway**
@@ -375,6 +401,7 @@ Update your `VITE_STRAPI_URL` to point to your production Strapi URL.
 ### Frontend
 
 Deploy the Portfolio Maker Pro frontend to:
+
 - **Vercel**
 - **Netlify**
 - **GitHub Pages**
@@ -398,6 +425,7 @@ Make sure to set environment variables in your deployment platform.
 ## Support
 
 For Strapi-specific issues, refer to:
+
 - [Strapi Documentation](https://docs.strapi.io/)
 - [Strapi Forum](https://forum.strapi.io/)
 

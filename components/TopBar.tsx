@@ -7,6 +7,8 @@ import type { SaveStatus } from '../hooks/useAutosave';
 import { exportPortfolioAsZip, downloadZip } from '../services/exportService';
 import type { ExportValidationError } from '../services/exportService';
 import { ExportReportModal } from './modals/ExportReportModal';
+import { GitHubPushModal } from './modals/GitHubPushModal';
+import { hasGitHubPAT, getGitHubUser } from '../services/githubService';
 
 
 export const TopBar: React.FC<{
@@ -31,6 +33,9 @@ export const TopBar: React.FC<{
   const [exportErrors, setExportErrors] = useState<ExportValidationError[] | undefined>();
   const [exportStats, setExportStats] = useState<{ fileSize: number; pageCount: number; assetCount: number } | undefined>();
   const localeMenuRef = useRef<HTMLDivElement>(null);
+  const [showGitHubModal, setShowGitHubModal] = useState(false);
+  const [isGitHubConnected, setIsGitHubConnected] = useState(false);
+  const [githubUsername, setGithubUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,6 +48,26 @@ export const TopBar: React.FC<{
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Check GitHub connection on mount
+  useEffect(() => {
+    const checkGitHubConnection = async () => {
+      const connected = hasGitHubPAT();
+      setIsGitHubConnected(connected);
+      
+      if (connected) {
+        try {
+          const user = await getGitHubUser();
+          setGithubUsername(user.login);
+        } catch (error) {
+          console.error('Failed to get GitHub user:', error);
+          setIsGitHubConnected(false);
+        }
+      }
+    };
+    
+    checkGitHubConnection();
+  }, [showGitHubModal]); // Re-check when modal closes
 
 
   const handleExport = async () => {
@@ -206,24 +231,43 @@ export const TopBar: React.FC<{
         )}
       </div>
 
-      <button
-        onClick={handleExport}
-        disabled={isExporting || saveStatus === 'saving'}
-        className="flex items-center gap-2 bg-brand-accent text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
-        title={saveStatus === 'saving' ? 'Waiting for autosave to complete...' : 'Export as .zip archive'}
-      >
-        {isExporting ? (
-          <>
-            <Loader2 size={18} className="animate-spin" />
-            <span className="hidden sm:inline">Exporting...</span>
-          </>
-        ) : (
-          <>
-            <FileArchive size={18} />
-            <span className="hidden sm:inline">Export .zip</span>
-          </>
-        )}
-      </button>
+      <div className="flex items-center gap-2">
+        {/* GitHub Push Button */}
+        <button
+          onClick={() => setShowGitHubModal(true)}
+          disabled={saveStatus === 'saving'}
+          className="flex items-center gap-2 bg-[#24292e] text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-[#1a1e22] transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed relative"
+          title={isGitHubConnected ? `Connected as ${githubUsername}` : 'Push to GitHub'}
+        >
+          {isGitHubConnected && (
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-brand-dark"></div>
+          )}
+          <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <span className="hidden sm:inline">{isGitHubConnected ? 'GitHub' : 'GitHub'}</span>
+        </button>
+        
+        {/* Export .zip Button */}
+        <button
+          onClick={handleExport}
+          disabled={isExporting || saveStatus === 'saving'}
+          className="flex items-center gap-2 bg-brand-accent text-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
+          title={saveStatus === 'saving' ? 'Waiting for autosave to complete...' : 'Export as .zip archive'}
+        >
+          {isExporting ? (
+            <>
+              <Loader2 size={18} className="animate-spin" />
+              <span className="hidden sm:inline">Exporting...</span>
+            </>
+          ) : (
+            <>
+              <FileArchive size={18} />
+              <span className="hidden sm:inline">Export .zip</span>
+            </>
+          )}
+        </button>
+      </div>
       
       {/* Export Report Modal */}
       <ExportReportModal
@@ -232,6 +276,14 @@ export const TopBar: React.FC<{
         errors={exportErrors}
         stats={exportStats}
         onRetry={handleExport}
+      />
+      
+      {/* GitHub Push Modal */}
+      <GitHubPushModal
+        isOpen={showGitHubModal}
+        onClose={() => setShowGitHubModal(false)}
+        portfolio={portfolio}
+        hasUnsavedChanges={saveStatus === 'saving'}
       />
     </header>
   );

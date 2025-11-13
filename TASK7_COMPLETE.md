@@ -80,8 +80,6 @@ portfolio-name.zip
 │   └── index.html             # English version
 ├── uk/
 │   └── index.html             # Ukrainian version
-├── ru/
-│   └── index.html             # Russian version
 ├── pl/
 │   └── index.html             # Polish version
 └── README.txt                  # Hosting instructions
